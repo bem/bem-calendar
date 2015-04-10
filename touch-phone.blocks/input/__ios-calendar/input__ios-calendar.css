@@ -1,0 +1,24 @@
+.input__ios-calendar
+{
+    position: absolute;
+    z-index: 6;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    opacity: 0;
+    border: 0;
+
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+         -o-user-select: none;
+            user-select: none;
+}

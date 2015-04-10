@@ -1,0 +1,72 @@
+.calendar__day
+{
+    line-height: 18px;
+
+    width: 18px;
+    padding: 5px;
+
+    text-align: center;
+}
+
+
+.calendar__day .calendar__inner
+{
+    cursor: pointer;
+}
+
+.calendar__day_type_weekend
+{
+    color: #d00;
+}
+
+.calendar__day_state_current
+{
+    position: relative;
+    z-index: 2;
+
+    display: inline-block;
+
+    margin: 0 -1px 0 0;
+
+    text-align: center;
+
+    outline: 0;
+
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+}
+
+.calendar__day_state_current:after,
+.calendar__day_state_current:before
+{
+    position: absolute;
+    top: 0;
+    right: -1px;
+    bottom: 0;
+    left: -1px;
+
+    content: '';
+
+    border-radius: 3px;
+}
+
+.calendar__day_state_current:after
+{
+    top: 1px;
+    right: 0;
+    bottom: 1px;
+    left: 0;
+}
+
+.calendar__day_state_current .calendar__inner
+{
+    position: relative;
+    z-index: 1;
+}
+
+.ua_js_no .calendar__day_state_current:after,
+.ua_js_no .calendar__day_state_current:before
+{
+    display: none;
+}

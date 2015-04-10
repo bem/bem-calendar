@@ -1,0 +1,15 @@
+.input__calendar_wp7_yes
+{
+    position: absolute;
+    left: 0;
+
+    display: block;
+
+    width: auto;
+    padding: 0;
+
+    text-align: right;
+
+    border-right: 4px solid transparent;
+    background-position: 100% 50%;
+}

@@ -1,0 +1,25 @@
+.calendar
+{
+    padding: 12px;
+}
+
+.calendar__title
+{
+    line-height: 16px;
+
+    margin-bottom: 8px;
+}
+
+.calendar__name
+{
+    text-align: center;
+}
+
+.calendar .calendar__day_type_off .calendar__inner,
+.calendar__day_type_weekend-off .calendar__inner,
+.calendar__arrow_disabled_yes
+{
+    cursor: default;
+
+    opacity: .3;
+}

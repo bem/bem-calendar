@@ -1,0 +1,32 @@
+.calendar__arrow
+{
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+
+    cursor: pointer;
+}
+
+.calendar__arrow_direction_left
+{
+    float: left;
+
+    background: url(calendar__arrow_direction_left.svg);
+}
+
+.calendar__arrow_direction_right
+{
+    float: right;
+
+    background: url(calendar__arrow_direction_right.svg);
+}
+
+.ua_svg_no .calendar__arrow_direction_left
+{
+    background-image: url(calendar__arrow_direction_left.png);
+}
+
+.ua_svg_no .calendar__arrow_direction_right
+{
+    background-image: url(calendar__arrow_direction_right.png);
+}

@@ -1,0 +1,14 @@
+{
+  "author": "seles",
+  "name": "calendar",
+  "email": "seles@yandex-team.ru",
+  "version": "0.0.0",
+  "ignore": [
+    ".enb/tmp",
+    "node_modules",
+    "libs"
+  ],
+  "dependencies": {
+    "bem-components": "v2.1.0"
+  }
+}

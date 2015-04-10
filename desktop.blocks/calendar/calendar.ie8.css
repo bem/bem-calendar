@@ -1,0 +1,21 @@
+.calendar__day_type_off .calendar__inner,
+.calendar__day_type_weekend-off .calendar__inner,
+.calendar__arrow_disabled_yes
+{
+    filter: alpha(opacity = 20);
+}
+
+.calendar__name
+{
+    margin: 0 16px;
+}
+
+.calendar__day_state_current
+{
+    line-height: 16px;
+
+    width: 16px;
+
+    border: 1px solid #8c8c8c;
+    background: none repeat scroll 0 0 #ffeca6;
+}

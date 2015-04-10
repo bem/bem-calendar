@@ -1,0 +1,16 @@
+.calendar
+{
+    padding: 14px;
+}
+
+.calendar__title
+{
+    line-height: 18px;
+
+    margin-bottom: 12px;
+}
+
+.calendar__name
+{
+    text-align: center;
+}

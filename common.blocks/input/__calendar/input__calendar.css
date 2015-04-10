@@ -1,0 +1,23 @@
+.input__calendar
+{
+    position: absolute;
+    z-index: 4;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    display: block;
+
+    width: 24px;
+    padding: 0 2px;
+
+    cursor: pointer;
+
+    opacity: 0.2;
+    background: url(input__calendar.svg) 50% 50% no-repeat;
+}
+
+.ua_svg_no .input__calendar
+{
+    background-image: url(input__calendar.png);
+}

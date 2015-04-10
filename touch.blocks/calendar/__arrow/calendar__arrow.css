@@ -1,0 +1,11 @@
+.calendar__arrow
+{
+    width: 12px;
+    height: 12px;
+    margin: -9px -4px;
+    padding: 12px;
+
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 12px 12px;
+}
