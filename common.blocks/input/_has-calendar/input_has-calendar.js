@@ -1,9 +1,7 @@
 /**
- * @module checkbox
+ * @module input
  */
 modules.define('input', ['i-bem__dom', 'bh', 'jquery', 'ua'], function(provide, BEMDOM, bh, $, ua) {
-var DAYNAMES = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
-    MONTHNAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 
 function compareMonths(a, b) {
     if(a.getFullYear() > b.getFullYear())
@@ -36,11 +34,7 @@ provide(BEMDOM.decl({ block : this.name, modName: 'has-calendar' }, /** @lends i
         js: function() {
             this.__base.apply(this, arguments);
 
-            this.params.months && (MONTHNAMES = this.params.months);
-            this.params.weekDays && (DAYNAMES = this.params.weekDays);
-
             this.today = new Date();
-
             this.today.setHours(0);
             this.today.setMinutes(0);
             this.today.setSeconds(0);
@@ -95,10 +89,6 @@ provide(BEMDOM.decl({ block : this.name, modName: 'has-calendar' }, /** @lends i
         }
     },
 
-    destruct: function() {
-        this._calendarPopup && this._calendarPopup.destruct();
-    },
-
     showCalendar: function() {
         this._selected = this.parseDate(this.getVal());
 
@@ -136,70 +126,6 @@ provide(BEMDOM.decl({ block : this.name, modName: 'has-calendar' }, /** @lends i
         });
     },
 
-    _setDateOnBlur: function() {
-        this._selected = this.parseDate(this.getVal());
-
-        if(!this._selected) {
-            this.setVal('');
-            return;
-        }
-
-        if(!this.isShownCalendar()) {
-            return;
-        }
-
-        var day = this._selected,
-            dayVal = day.getDate(),
-            monthVal = day.getMonth() + 1,
-            yearVal = day.getFullYear(),
-            dateVal = leadZero(dayVal) + '.' +
-                leadZero(monthVal) + '.' + yearVal;
-
-        this._onChange(dateVal);
-    },
-
-    _popupBEMJSON: function() {
-        return {
-            block: 'popup',
-            mods: {
-                autoclosable: true,
-                target: 'anchor',
-                theme: 'islands'
-            },
-            mix: this.params.popupMix,
-            js: true,
-            content: ''
-        };
-    },
-
-    _getCalendarPopup: function() {
-        if(!this._calendarPopup) {
-            this._calendarPopup = $(bh.apply(this._popupBEMJSON())).bem('popup');
-
-            this._calendarPopup.bindTo('pointerclick', function(e) {
-                if(this._isFocusHackNeed) {
-                    this._isBlurOnCalendar = true;
-                }
-
-                e.preventDefault();
-            }.bind(this));
-
-            this._calendarPopup.on('outside-click', function(e, domEvent) {
-                $(domEvent.target).closest(this.domElem.add(this._calendarPopup)).length
-                    && e.preventDefault();
-            }.bind(this));
-        }
-
-        return this._calendarPopup;
-    },
-
-    _onChange: function(date) {
-        this.setVal(date);
-        this.hideCalendar();
-
-        this.emit('change', this.parseDate(date));
-    },
-
     getCalendar: function(month) {
         var weekDay,
             weeks = [],
@@ -208,7 +134,7 @@ provide(BEMDOM.decl({ block : this.name, modName: 'has-calendar' }, /** @lends i
             week = new Array(countDays),
             dateIterator = new Date(month.getTime());
 
-        for (dateIterator.setDate(1); dateIterator.getMonth() === month.getMonth(); dateIterator.setDate(dateIterator.getDate() + 1)) {
+        for(dateIterator.setDate(1); dateIterator.getMonth() === month.getMonth(); dateIterator.setDate(dateIterator.getDate() + 1)) {
             weekDay = (dateIterator.getDay() + lastDay) % countDays; // Получаем 0 - пн, 1 - вт, и т.д.
 
             week[weekDay] = new Date(dateIterator.getTime());
@@ -224,200 +150,6 @@ provide(BEMDOM.decl({ block : this.name, modName: 'has-calendar' }, /** @lends i
         }
 
         return weeks;
-    },
-
-    setLimits: function(earlier, later) {
-        this.earlierLimit = earlier;
-        this.laterLimit = later;
-
-        var value = this.parseDate(this.getVal());
-
-        if(value && !this._isValidDate(value))
-            this.setVal('');
-
-        if(earlier && compareMonths(this._month, earlier) < 0)
-            this._month = new Date(earlier.getTime());
-
-        if(later && compareMonths(later, this._month) < 0)
-            this._month = new Date(later.getTime());
-
-        this._month.setDate(1);
-    },
-
-    _isValidDate: function(day) {
-        return !(this.earlierLimit && day < this.earlierLimit ||
-            this.laterLimit && day > this.laterLimit);
-    },
-
-    _buildCalendar: function() {
-         var month = this._month,
-            calendar,
-            title,
-            layout,
-            row,
-            rows = [],
-            content,
-            prevMonth = !this.earlierLimit || compareMonths(month, this.earlierLimit) > 0,
-            nextMonth = !this.laterLimit || compareMonths(this.laterLimit, month) > 0,
-            leftArrow,
-            rightArrow;
-
-        title = {
-            elem: 'title',
-            content: [
-                {
-                    elem: 'arrow', mods: { direction: 'left' }
-                },
-                {
-                    elem: 'arrow', mods: { direction: 'right' }
-                },
-                {
-                    elem: 'name',
-                    content: MONTHNAMES[month.getMonth()] + ' ' + month.getFullYear()
-                }
-            ]
-        };
-
-        if(!prevMonth)
-            title.content[0].mods.disabled = 'yes';
-
-        if(!nextMonth)
-            title.content[1].mods.disabled = 'yes';
-
-        row = [];
-
-        DAYNAMES.forEach(function(name, i) {
-            var dayname = {
-                elem: 'dayname',
-                tag: 'th',
-                content: name
-            };
-
-            if(i > 4) {
-                dayname.mods = { type: 'weekend' };
-            }
-
-            row.push(dayname);
-        });
-
-        rows.push(row);
-
-        this.getCalendar(month).forEach(function(week) {
-            row = [];
-
-            var _this = this;
-            $.each(week, function(i, day) {
-                console.log(i, day);
-                var off = !_this._isValidDate(day),
-                    weekend = i > 4,
-                    type,
-                    state,
-                    dayVal,
-                    monthVal,
-                    yearVal,
-                    dateVal,
-                    dayElem = {
-                        elem: 'day',
-                        tag: 'td',
-                        content: {
-                            elem: 'inner',
-                            content: day ? day.getDate() : ''
-                        },
-                        attrs: {},
-                        mods: {}
-                    };
-
-                if(day && !off) {
-                    dayVal = day.getDate();
-                    monthVal = day.getMonth() + 1;
-                    yearVal = day.getFullYear();
-                    dateVal = leadZero(dayVal) + '.' +
-                        leadZero(monthVal) + '.' + yearVal;
-
-                    dayElem.attrs['data-day'] = dateVal;
-                }
-
-                if(off || weekend) {
-                    type = weekend ? (off ? 'weekend-off' : 'weekend') : 'off';
-                }
-
-                if(day && _this._selected && day.getTime() == _this._selected.getTime()) {
-                    state = 'current';
-                    console.log(state);
-                }
-
-                if(type) {
-                    dayElem.mods.type = type;
-                }
-
-                if(state) {
-                    dayElem.mods.state = state;
-                }
-
-                row.push(dayElem);
-            });
-
-            rows.push(row);
-        }, this);
-
-        content = [];
-
-        rows.forEach(function(row) {
-            content.push({
-                elem: 'row',
-                tag: 'tr',
-                content: row
-            });
-        });
-
-        layout = {
-            elem: 'layout',
-            tag: 'table',
-            attrs: { cellspacing: '0' },
-            content: content
-        };
-
-        calendar = $(bh.apply({
-            block: 'calendar',
-            mods: { theme: 'islands' },
-            content: [
-                title,
-                layout
-            ]
-        })).bem('calendar');
-
-        leftArrow = calendar.elem('arrow', 'direction', 'left');
-        rightArrow = calendar.elem('arrow', 'direction', 'right');
-
-        if(!calendar.hasMod(leftArrow, 'disabled', 'yes')) {
-            calendar.bindTo(leftArrow, 'pointerclick', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                this.switchMonth(-1);
-            }.bind(this));
-        }
-
-        if(!calendar.hasMod(rightArrow, 'disabled', 'yes')) {
-            calendar.bindTo(rightArrow, 'pointerclick', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                this.switchMonth(1);
-            }.bind(this));
-        }
-
-        calendar.bindTo('day', 'pointerclick', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            var date = $(e.currentTarget).data('day');
-            date && this._onChange(date);
-        }.bind(this));
-
-        this._getCalendarPopup().setContent(calendar.domElem);
-
-        return calendar;
     },
 
     parseDate: function(val) {
@@ -462,6 +194,248 @@ provide(BEMDOM.decl({ block : this.name, modName: 'has-calendar' }, /** @lends i
         }
 
         return null;
+    },
+
+    setLimits: function(earlier, later) {
+        this._earlierLimit = earlier;
+        this._laterLimit = later;
+
+        var value = this.parseDate(this.getVal());
+
+        if(value && !this._isValidDate(value))
+            this.setVal('');
+
+        if(earlier && compareMonths(this._month, earlier) < 0)
+            this._month = new Date(earlier.getTime());
+
+        if(later && compareMonths(later, this._month) < 0)
+            this._month = new Date(later.getTime());
+
+        this._month.setDate(1);
+    },
+
+    destruct: function() {
+        this._calendarPopup && this._calendarPopup.destruct();
+    },
+
+    _setDateOnBlur: function() {
+        this._selected = this.parseDate(this.getVal());
+
+        if(!this._selected) {
+            this.setVal('');
+            return;
+        }
+
+        if(!this.isShownCalendar()) {
+            return;
+        }
+
+        this._onChange(this._formatDate(this._selected));
+    },
+
+    _formatDate: function(date) {
+        var year = date.getFullYear(),
+            month = date.getMonth() + 1,
+            day = date.getDate();
+
+        return [leadZero(day), leadZero(month), year].join('.');
+    },
+
+    _popupBEMJSON: function() {
+        return {
+            block: 'popup',
+            mods: {
+                autoclosable: true,
+                target: 'anchor',
+                theme: 'islands'
+            },
+            mix: this.params.popupMix,
+            js: true,
+            content: ''
+        };
+    },
+
+    _getCalendarPopup: function() {
+        if(!this._calendarPopup) {
+            this._calendarPopup = $(bh.apply(this._popupBEMJSON())).bem('popup');
+
+            this._calendarPopup.bindTo('pointerclick', function(e) {
+                if(this._isFocusHackNeed) {
+                    this._isBlurOnCalendar = true;
+                }
+
+                e.preventDefault();
+            }.bind(this));
+
+            this._calendarPopup.on('outside-click', function(e, domEvent) {
+                $(domEvent.target).closest(this.domElem.add(this._calendarPopup)).length
+                    && e.preventDefault();
+            }.bind(this));
+        }
+
+        return this._calendarPopup;
+    },
+
+    _onChange: function(date) {
+        this.setVal(date);
+        this.hideCalendar();
+
+        this.emit('change', this.parseDate(date));
+    },
+
+    _isValidDate: function(day) {
+        return !(this._earlierLimit && day < this._earlierLimit ||
+            this._laterLimit && day > this._laterLimit);
+    },
+
+    _buildCalendar: function() {
+         var month = this._month,
+            prevMonth = !this._earlierLimit || compareMonths(month, this._earlierLimit) > 0,
+            nextMonth = !this._laterLimit || compareMonths(this._laterLimit, month) > 0,
+            calendar,
+            layout,
+            row,
+            rows = [],
+            content;
+
+
+        var title = {
+            elem: 'title',
+            content: [
+                {
+                    elem: 'arrow',
+                    mods: {
+                        direction: 'left',
+                        disabled: !prevMonth
+                    }
+                },
+                {
+                    elem: 'arrow',
+                    mods: {
+                        direction: 'right',
+                        disabled: !nextMonth
+                    }
+                },
+                {
+                    elem: 'name',
+                    content: this.params.months[month.getMonth()] + ' ' + month.getFullYear()
+                }
+            ]
+        };
+
+        row = [];
+
+        this.params.weekdays.forEach(function(name, i) {
+            var dayname = {
+                elem: 'dayname',
+                tag: 'th',
+                content: name
+            };
+
+            if(i > 4) {
+                dayname.mods = { type: 'weekend' };
+            }
+
+            row.push(dayname);
+        });
+
+        rows.push(row);
+
+        this.getCalendar(month).forEach(function(week) {
+            row = [];
+
+            var _this = this;
+            $.each(week, function(i, day) {
+                var off = !_this._isValidDate(day),
+                    weekend = i > 4,
+                    dayElem = {
+                        elem: 'day',
+                        tag: 'td',
+                        content: {
+                            elem: 'inner',
+                            content: day ? day.getDate() : ''
+                        },
+                        attrs: {},
+                        mods: {}
+                    };
+
+                if(day && !off) {
+                    dayElem.attrs['data-day'] = _this._formatDate(day);
+                }
+
+                if(off || weekend) {
+                    dayElem.mods.type = weekend ? (off ? 'weekend-off' : 'weekend') : 'off';
+                }
+
+                if(day && _this._selected && day.getTime() === _this._selected.getTime()) {
+                    dayElem.mods.state = 'current';
+                }
+
+                row.push(dayElem);
+            });
+
+            rows.push(row);
+        }, this);
+
+        content = [];
+
+        rows.forEach(function(row) {
+            content.push({
+                elem: 'row',
+                tag: 'tr',
+                content: row
+            });
+        });
+
+        layout = {
+            elem: 'layout',
+            tag: 'table',
+            attrs: { cellspacing: '0' },
+            content: content
+        };
+
+        calendar = $(bh.apply({
+            block: 'calendar',
+            mods: { theme: 'islands' },
+            content: [
+                title,
+                layout
+            ]
+        })).bem('calendar');
+
+        var leftArrow = calendar.elem('arrow', 'direction', 'left'),
+            rightArrow = calendar.elem('arrow', 'direction', 'right');
+
+        if(!calendar.hasMod(leftArrow, 'disabled', 'yes')) {
+            calendar.bindTo(leftArrow, 'pointerclick', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                this.switchMonth(-1);
+            }.bind(this));
+        }
+
+        if(!calendar.hasMod(rightArrow, 'disabled', 'yes')) {
+            calendar.bindTo(rightArrow, 'pointerclick', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                this.switchMonth(1);
+            }.bind(this));
+        }
+
+        calendar.bindTo('day', 'pointerclick', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var date = $(e.currentTarget).data('day');
+            date && this._onChange(date);
+        }.bind(this));
+
+        this._getCalendarPopup().setContent(calendar.domElem);
+
+        return calendar;
     }
+
 }));
 });
