@@ -23,3 +23,9 @@
 
     opacity: .3;
 }
+
+.calendar__layout
+{
+    border-spacing: 0;
+    border-collapse: separate;
+}
