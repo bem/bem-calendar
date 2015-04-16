@@ -1,8 +1,0 @@
-.ua_platform_android .input__calendar-popup
-{
-    padding: 0;
-
-    border: 1px solid rgba(0,0,0,.15);
-    -webkit-box-shadow: 0 8px 30px -5px rgba(0, 0, 0, .5);
-            box-shadow: 0 8px 30px -5px rgba(0, 0, 0, .5);
-}
