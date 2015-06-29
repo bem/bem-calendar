@@ -1,6 +1,6 @@
 {
-  "name": "calendar",
-  "description": "BEM project",
+  "name": "o2-calendar",
+  "description": "Островной календарь для O2",
   "version": "0.0.0",
   "repository": {},
   "author": {
