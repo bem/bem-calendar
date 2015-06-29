@@ -1,6 +1,6 @@
 {
   "author": "seles",
-  "name": "calendar",
+  "name": "o2-calendar",
   "email": "seles@yandex-team.ru",
   "version": "0.0.0",
   "ignore": [
@@ -9,6 +9,7 @@
     "libs"
   ],
   "dependencies": {
-    "bem-components": "v2.1.0"
+    "bem-core": "v2.6.0",
+    "bem-components": "v2.2.1"
   }
 }
