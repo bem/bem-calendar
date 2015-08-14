@@ -9,7 +9,7 @@
     "libs"
   ],
   "dependencies": {
-    "bem-core": "v2.6.0",
-    "bem-components": "v2.2.1"
+    "bem-core": "v2.7.0",
+    "bem-components": "v2.3.0"
   }
 }
