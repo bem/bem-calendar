@@ -1,7 +1,7 @@
 {
   "name": "o2-calendar",
-  "description": "Островной календарь для O2",
-  "version": "0.0.0",
+  "description": "Calendar with Islands theme",
+  "version": "1.0.0",
   "repository": {},
   "author": {
     "name": "seles",
@@ -9,21 +9,23 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "bower": "1.4.1",
-    "enb": "0.15.0",
-    "enb-bem-techs": "1.0.4",
-    "enb-autoprefixer": "0.2.3",
-    "enb-borschik": "1.5.0",
-    "borschik-tech-cleancss": "2.0.1",
-    "enb-diverse-js": "0.1.0",
-    "enb-modules": "0.2.0",
-    "enb-stylus": "1.2.3",
-    "enb-bh": "0.4.1",
-    "bh": "3.3.0"
+    "bh": "^3.3.2",
+    "borschik-tech-cleancss": "^2.0.1",
+    "bower": "^1.4.1",
+    "enb": "^0.17.2",
+    "enb-bem-techs": "^2.0.0",
+    "enb-bem-tmpl-specs": "^0.13.2",
+    "enb-bemxjst": "^2.0.1",
+    "enb-bemxjst-2": "https://github.com/tadatuta/enb-bemxjst/archive/bem-xjst-2x.tar.gz",
+    "enb-bh": "^1.0.0",
+    "enb-borschik": "^2.0.0",
+    "enb-diverse-js": "^0.1.0",
+    "enb-magic-factory": "^0.4.4",
+    "enb-modules": "^0.2.0",
+    "enb-stylus": "^2.0.0"
   },
   "scripts": {
-    "postinstall": "npm run deps",
-    "deps": "bower install --non-interactive",
+    "deps": "bower install",
     "start": "enb server"
   },
   "engines": {

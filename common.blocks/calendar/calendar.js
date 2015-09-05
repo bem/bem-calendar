@@ -1,7 +1,7 @@
 /**
  * @module calendar
  */
-modules.define('calendar', ['i-bem__dom', 'bh', 'jquery'], function(provide, BEMDOM, bh, $) {
+modules.define('calendar', ['i-bem__dom', 'BEMHTML', 'jquery'], function(provide, BEMDOM, BEMHTML, $) {
 
 function compareMonths(a, b) {
     if(a.getFullYear() > b.getFullYear()) {
@@ -252,7 +252,7 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
         rows.push(this._buildShortWeekdays());
         rows = rows.concat(this._buildMonth(this._month));
 
-        var calendar = $(bh.apply({
+        var calendar = $(BEMHTML.apply({
             block: 'calendar',
             elem: 'container',
             content: [

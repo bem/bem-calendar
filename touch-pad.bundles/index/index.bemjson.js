@@ -5,19 +5,19 @@
     },
     title: 'Datepicker',
     styles: [
-        { elem: 'css', url: '_index.css' },
+        { elem: 'css', url: 'index.min.css' },
         '<!--[if IE]>',
-            { elem: 'css', url: '_index.ie.css' },
+            { elem: 'css', url: 'index.ie.min.css' },
         '<![endif]-->',
         '<!--[if IE 8]>',
-            { elem: 'css', url: '_index.ie8.css' },
+            { elem: 'css', url: 'index.ie8.min.css' },
         '<![endif]-->',
         '<!--[if IE 9]>',
-            { elem: 'css', url: '_index.ie9.css' },
+            { elem: 'css', url: 'index.ie9.min.css' },
         '<![endif]-->'
     ],
     scripts: [
-        { elem: 'js', url: '_index.js' }
+        { elem: 'js', url: 'index.min.js' }
     ],
     content: [
         {

@@ -1,8 +1,46 @@
 var enbBemTechs = require('enb-bem-techs'),
     borschikTech = require('enb-borschik/techs/borschik'),
-    isProd = process.env.YENV === 'production';
+    isProd = process.env.YENV === 'production',
+    bhOptions = {
+        jsAttrName: 'data-bem',
+        jsAttrScheme: 'json'
+    };
 
 module.exports = function (config) {
+    config.includeConfig('enb-bem-tmpl-specs');
+
+    config.module('enb-bem-tmpl-specs').createConfigurator('tmpl-specs').configure({
+        destPath: 'desktop.tmpl-specs',
+        levels: ['common.blocks', 'desktop.blocks'],
+        sourceLevels: getDesktops(),
+        engines: {
+            'bh@4': {
+                tech: 'enb-bh/techs/bh-commonjs',
+                options: { bhOptions: bhOptions }
+            },
+            'bh@3': {
+                tech: 'enb-bh/techs/bh-commonjs',
+                options: {
+                    bhFilename: require.resolve('bh/lib/bh.js'),
+                    bhOptions: bhOptions
+                }
+            },
+            'bemhtml-dev': {
+                tech: 'enb-bemxjst/techs/bemhtml',
+                options: { devMode: true }
+            },
+            'bemhtml-prod': {
+                tech: 'enb-bemxjst/techs/bemhtml',
+                options: { devMode: false }
+            },
+            'bemhtml@bem-xjst-4': {
+                tech: 'enb-bemxjst-2/techs/bemhtml',
+                options: { exportName: 'BEMHTML' }
+            }
+        },
+        depsTech: enbBemTechs.deps
+    });
+
     config.nodes('*.bundles/*', function (nodeConfig) {
         nodeConfig.addTechs([
             // essential
@@ -35,12 +73,10 @@ module.exports = function (config) {
                 source: '?.pre.js',
                 target: '?.js'
             }],
-            // css
-            [require('enb-stylus/techs/css-stylus'), { target: '?.noprefix.css' }],
             // bh
-            [require('enb-bh/techs/bh-server'), {
-                jsAttrName: 'data-bem',
-                jsAttrScheme: 'json'
+            [require('enb-bh/techs/bh-commonjs'), {
+                bhOptions: bhOptions,
+                mimic: ['bh', 'BEMHTML']
             }],
             // client bh
             [enbBemTechs.depsByTechToBemdecl, {
@@ -57,31 +93,30 @@ module.exports = function (config) {
                 filesTarget: '?.bh.files',
                 dirsTarget: '?.bh.dirs'
             }],
-            [require('enb-bh/techs/bh-client-module'), {
+            [require('enb-bh/techs/bh-bundle'), {
                 target: '?.browser.bh.js',
                 filesTarget: '?.bh.files',
-                jsAttrName: 'data-bem',
-                jsAttrScheme: 'json',
-                mimic: 'BEMHTML'
+                bhOptions: bhOptions,
+                mimic: ['bh', 'BEMHTML']
             }],
             // html
-            [require('enb-bh/techs/html-from-bemjson')],
+            [require('enb-bh/techs/bemjson-to-html')],
             // borschik
-            [borschikTech, { sourceTarget: '?.css', destTarget: '_?.css', tech: 'cleancss', freeze: true, minify: isProd }],
-            [borschikTech, { sourceTarget: '?.ie.css', destTarget: '_?.ie.css', freeze: true, minify: isProd }],
-            [borschikTech, { sourceTarget: '?.ie8.css', destTarget: '_?.ie8.css', freeze: true, minify: isProd }],
-            [borschikTech, { sourceTarget: '?.ie9.css', destTarget: '_?.ie9.css', freeze: true, minify: isProd }],
-            [borschikTech, { sourceTarget: '?.js', destTarget: '_?.js', freeze: true, minify: isProd }],
-            [borschikTech, { sourceTarget: '?.bh.js', destTarget: '_?.bh.js', freeze: true, minify: isProd }]
+            [borschikTech, { sourceTarget: '?.css', destTarget: '?.min.css', tech: 'cleancss', minify: isProd }],
+            [borschikTech, { sourceTarget: '?.ie.css', destTarget: '?.ie.min.css', minify: isProd }],
+            [borschikTech, { sourceTarget: '?.ie8.css', destTarget: '?.ie8.min.css', minify: isProd }],
+            [borschikTech, { sourceTarget: '?.ie9.css', destTarget: '?.ie9.min.css', minify: isProd }],
+            [borschikTech, { sourceTarget: '?.js', destTarget: '?.min.js', minify: isProd }],
+            [borschikTech, { sourceTarget: '?.bh.js', destTarget: '?.bh.min.js', minify: isProd }]
         ]);
 
         nodeConfig.addTargets([
-            '_?.css',
-            '_?.ie.css',
-            '_?.ie8.css',
-            '_?.ie9.css',
-            '_?.js',
-            '_?.bh.js',
+            '?.min.css',
+            '?.ie.min.css',
+            '?.ie8.min.css',
+            '?.ie9.min.css',
+            '?.min.js',
+            '?.bh.min.js',
             '?.html'
         ]);
     });
@@ -89,11 +124,10 @@ module.exports = function (config) {
     config.nodes('*desktop.bundles/*', function (nodeConfig) {
         nodeConfig.addTechs([
             // essential
-            [enbBemTechs.levels, { levels: getDesktops(config) }],
-            // autoprefixer
-            [require('enb-autoprefixer/techs/css-autoprefixer'), {
-                browserSupport: ['last 2 versions', 'ie 10', 'ff 24', 'opera 12.16'],
-                sourceTarget: '?.noprefix.css'
+            [enbBemTechs.levels, { levels: getDesktops() }],
+            // css
+            [require('enb-stylus/techs/stylus'), {
+                autoprefixer: { browsers: ['ie >= 10', 'last 2 versions', 'opera 12.1', '> 2%'] }
             }]
         ]);
     });
@@ -101,11 +135,10 @@ module.exports = function (config) {
     config.nodes('*touch-pad.bundles/*', function (nodeConfig) {
         nodeConfig.addTechs([
             // essential
-            [enbBemTechs.levels, { levels: getTouchPads(config) }],
-            // autoprefixer
-            [require('enb-autoprefixer/techs/css-autoprefixer'), {
-                browserSupport: ['android 4', 'ios 5'],
-                sourceTarget: '?.noprefix.css'
+            [enbBemTechs.levels, { levels: getTouchPads() }],
+            // css
+            [require('enb-stylus/techs/stylus'), {
+                autoprefixer: { browsers: ['android 4', 'ios 5'] }
             }]
         ]);
     });
@@ -113,18 +146,17 @@ module.exports = function (config) {
     config.nodes('*touch-phone.bundles/*', function (nodeConfig) {
         nodeConfig.addTechs([
             // essential
-            [enbBemTechs.levels, { levels: getTouchPhones(config) }],
-            // autoprefixer
-            [require('enb-autoprefixer/techs/css-autoprefixer'), {
-                browserSupport: ['android 4', 'ios 6', 'ie 10'],
-                sourceTarget: '?.noprefix.css'
+            [enbBemTechs.levels, { levels: getTouchPhones() }],
+            // css
+            [require('enb-stylus/techs/stylus'), {
+                autoprefixer: { browserSupport: ['android 4', 'ios 6', 'ie 10'] }
             }]
         ]);
     });
 
 };
 
-function getDesktops(config) {
+function getDesktops() {
     return [
         { path: 'libs/bem-core/common.blocks', check: false },
         { path: 'libs/bem-core/desktop.blocks', check: false },
@@ -134,12 +166,10 @@ function getDesktops(config) {
         { path: 'libs/bem-components/design/desktop.blocks', check: false },
         'common.blocks',
         'desktop.blocks'
-    ].map(function (level) {
-        return config.resolvePath(level);
-    });
+    ];
 }
 
-function getTouchPads(config) {
+function getTouchPads() {
     return [
         { path: 'libs/bem-core/common.blocks', check: false },
         { path: 'libs/bem-core/touch.blocks', check: false },
@@ -149,14 +179,11 @@ function getTouchPads(config) {
         { path: 'libs/bem-components/design/touch.blocks', check: false },
         { path: 'libs/bem-components/design/touch-pad.blocks', check: false },
         'common.blocks',
-        'touch.blocks',
-        'touch-pad.blocks'
-    ].map(function (level) {
-        return config.resolvePath(level);
-    });
+        'touch.blocks'
+    ];
 }
 
-function getTouchPhones(config) {
+function getTouchPhones() {
     return [
         { path: 'libs/bem-core/common.blocks', check: false },
         { path: 'libs/bem-core/touch.blocks', check: false },
@@ -168,7 +195,5 @@ function getTouchPhones(config) {
         'common.blocks',
         'touch.blocks',
         'touch-phone.blocks'
-    ].map(function (level) {
-        return config.resolvePath(level);
-    });
+    ];
 }
