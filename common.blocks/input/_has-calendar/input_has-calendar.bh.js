@@ -12,18 +12,12 @@ module.exports = function(bh) {
         });
     });
 
-    bh.match('input_has-calendar__control', function(ctx) {
-        return [
-            ctx.json(),
-            {
-                elem: 'calendar'
-            }
-        ]
-    });
-
     bh.match('input_has-calendar__box', function(ctx) {
-        return [
-            ctx.json(),
+        var box = ctx.json();
+
+        box.content = [].concat(
+            box.content,
+            { elem: 'calendar' },
             {
                 block: 'calendar',
                 mods: {
@@ -31,6 +25,8 @@ module.exports = function(bh) {
                 },
                 js: ctx.tParam('calendar')
             }
-        ]
+        );
+
+        return box;
     });
 };

@@ -2,14 +2,13 @@
   "author": "seles",
   "name": "o2-calendar",
   "email": "seles@yandex-team.ru",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "ignore": [
     ".enb/tmp",
     "node_modules",
     "libs"
   ],
   "dependencies": {
-    "bem-core": "v2.7.0",
-    "bem-components": "v2.3.0"
+    "bem-components": "^2.3.0"
   }
 }

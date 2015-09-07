@@ -5,3 +5,4 @@ libs/
 .enb/tmp/
 *.bundles*/*/*.*
 !*.bundles*/*/*.bemjson.js
+/*.tmpl-specs

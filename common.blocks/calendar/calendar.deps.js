@@ -1,4 +1,8 @@
 ({
+    mustDeps: {
+        block: 'i-bem',
+        elems: 'dom'
+    },
     shouldDeps: [
         {
             elems: ['arrow', 'day', 'dayname']
