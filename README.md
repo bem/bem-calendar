@@ -45,7 +45,6 @@
 ```
 
 Есть возможность установить ограничения на выбор даты с помощью полей `earlierLimit` и `laterLimit`.
-![calendar](https://github.yandex-team.ru/search-interfaces/o2-calendar/raw/master/preview/limits.png)
 ```js
 {
     block: 'input',
@@ -65,3 +64,4 @@
     val: '11.11.2015'
 }
 ```
+![calendar](https://github.yandex-team.ru/search-interfaces/o2-calendar/raw/master/preview/limits.png)
