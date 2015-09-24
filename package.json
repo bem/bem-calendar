@@ -1,7 +1,7 @@
 {
   "name": "o2-calendar",
   "description": "Calendar with Islands theme",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "repository": {},
   "author": {
     "name": "seles",
@@ -26,7 +26,8 @@
   },
   "scripts": {
     "deps": "bower install",
-    "start": "enb server"
+    "start": "enb server",
+    "postinstall": "./node_modules/bower/bin/bower i"
   },
   "engines": {
     "node": ">=0.10.0"

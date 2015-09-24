@@ -209,12 +209,12 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
         this._earlierLimit = this.parseDate(earlier);
         this._laterLimit = this.parseDate(later);
 
-        if(earlier && compareMonths(this._month, earlier) < 0) {
-            this._month = new Date(earlier.getTime());
+        if(earlier && compareMonths(this._month, this._earlierLimit) < 0) {
+            this._month = new Date(this._earlierLimit.getTime());
         }
 
-        if(later && compareMonths(later, this._month) < 0) {
-            this._month = new Date(later.getTime());
+        if(later && compareMonths(this._laterLimit, this._month) < 0) {
+            this._month = new Date(this._laterLimit.getTime());
         }
 
         this._month.setDate(1);

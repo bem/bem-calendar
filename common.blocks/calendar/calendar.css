@@ -16,7 +16,7 @@
 }
 
 .calendar .calendar__day_type_off .calendar__inner,
-.calendar__day_type_weekend-off .calendar__inner,
+.calendar .calendar__day_type_weekend-off .calendar__inner,
 .calendar__arrow_disabled_yes
 {
     cursor: default;

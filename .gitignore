@@ -6,3 +6,4 @@ libs/
 *.bundles*/*/*.*
 !*.bundles*/*/*.bemjson.js
 /*.tmpl-specs
+.idea
