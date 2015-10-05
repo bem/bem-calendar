@@ -21,6 +21,13 @@
     background: url(calendar__arrow_direction_right.svg);
 }
 
+.calendar__arrow_disabled
+{
+    opacity: 0.2;
+
+    cursor: default;
+}
+
 .ua_svg_no .calendar__arrow_direction_left
 {
     background-image: url(calendar__arrow_direction_left.png);
