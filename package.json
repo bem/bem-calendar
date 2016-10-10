@@ -24,6 +24,9 @@
     "enb-modules": "^0.2.0",
     "enb-stylus": "^2.0.0"
   },
+  "peerDependencies": {
+    "bem-components": "bem/bem-components#v5"
+  },
   "scripts": {
     "deps": "bower install",
     "start": "enb server"

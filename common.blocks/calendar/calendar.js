@@ -1,7 +1,7 @@
 /**
  * @module calendar
  */
-modules.define('calendar', ['i-bem__dom', 'BEMHTML', 'jquery', 'popup'], function(provide, BEMDOM, BEMHTML, $) {
+modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'popup'], function(provide, bemDom, BEMHTML, $, Popup) {
 
 function compareMonths(a, b) {
     if(a.getFullYear() > b.getFullYear()) {
@@ -51,7 +51,7 @@ function parseDateParts(str) {
  * @augments control
  * @bem
  */
-provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
+provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     onSetMod: {
         js: {
             inited: function() {
@@ -59,7 +59,7 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
 
                 this._val = null;
 
-                this._popup = this.domElem.bem('popup');
+                this._popup = this.domElem.bem(Popup);
 
                 this._month = this._getToday();
                 this._month.setDate(1);
@@ -68,6 +68,10 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
                     this.params.earlierLimit,
                     this.params.laterLimit
                 );
+            },
+
+            '': function() {
+                this._popup && bemDom.destruct(this._popup.domElem);
             }
         }
     },
@@ -141,7 +145,7 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
     switchMonth: function(step) {
         this._month.setMonth(this._month.getMonth() + step);
 
-        this.nextTick(this._build);
+        this._nextTick(this._build);
 
         return this;
     },
@@ -222,10 +226,6 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
         this._month.setDate(1);
 
         return this;
-    },
-
-    destruct: function() {
-        this._popup && this._popup.destruct();
     },
 
     _getToday: function() {
@@ -394,29 +394,29 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
         };
     }
 },  /** @lends calendar */ {
-    live: function() {
-        this.liveBindTo('arrow', 'pointerclick', function(e) {
+    lazyInit: false,
+
+    onInit: function () {
+        this._domEvents('arrow').on('pointerclick', function(e) {
             var elem = $(e.currentTarget);
             if(!this.hasMod(elem, 'disabled')) {
                 this.switchMonth(this.hasMod(elem, 'direction', 'left') ? -1 : 1);
             }
         });
 
-        this.liveBindTo('day', 'pointerclick', function(e) {
+        this._domEvents('day').on('pointerclick', function(e) {
             var date = $(e.currentTarget).data('day');
             if(date) {
                 this.setVal(date);
                 this.hide();
 
                 var val = this.getVal();
-                this.emit('change', {
+                this._emit('change', {
                     value: val,
                     formated: this._formatDate(val)
                 });
             }
         });
-
-        return false;
     }
 }));
 
