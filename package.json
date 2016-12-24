@@ -26,8 +26,7 @@
   },
   "scripts": {
     "deps": "bower install",
-    "start": "enb server",
-    "postinstall": "./node_modules/bower/bin/bower i"
+    "start": "enb server"
   },
   "engines": {
     "node": ">=0.10.0"
