@@ -1,7 +1,7 @@
 /**
  * @module calendar
  */
-modules.define('calendar', ['i-bem__dom', 'BEMHTML', 'jquery'], function(provide, BEMDOM, BEMHTML, $) {
+modules.define('calendar', ['i-bem__dom', 'BEMHTML', 'jquery', 'popup'], function(provide, BEMDOM, BEMHTML, $) {
 
 function compareMonths(a, b) {
     if(a.getFullYear() > b.getFullYear()) {
@@ -53,20 +53,22 @@ function parseDateParts(str) {
  */
 provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
     onSetMod: {
-        js: function() {
-            this.__base.apply(this, arguments);
+        js: {
+            inited: function() {
+                this.__base.apply(this, arguments);
 
-            this._val = null;
+                this._val = null;
 
-            this._popup = this.domElem.bem('popup');
+                this._popup = this.domElem.bem('popup');
 
-            this._month = this._getToday();
-            this._month.setDate(1);
+                this._month = this._getToday();
+                this._month.setDate(1);
 
-            this.setLimits(
-                this.params.earlierLimit,
-                this.params.laterLimit
-            );
+                this.setLimits(
+                    this.params.earlierLimit,
+                    this.params.laterLimit
+                );
+            }
         }
     },
 
@@ -318,7 +320,7 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
                             content: day ? day.getDate() : ''
                         },
                         attrs: {},
-                        mods: {}
+                        elemMods: {}
                     };
 
                 if(day && !off) {
@@ -326,11 +328,11 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
                 }
 
                 if(off || weekend) {
-                    dayElem.mods.type = weekend ? (off ? 'weekend-off' : 'weekend') : 'off';
+                    dayElem.elemMods.type = weekend ? (off ? 'weekend-off' : 'weekend') : 'off';
                 }
 
                 if(day && val && day.getTime() === val.getTime()) {
-                    dayElem.mods.state = 'current';
+                    dayElem.elemMods.state = 'current';
                 }
 
                 row.push(dayElem);
@@ -353,7 +355,7 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
             };
 
             if(i > 4) {
-                dayname.mods = { type: 'weekend' };
+                dayname.elemMods = { type: 'weekend' };
             }
 
             row.push(dayname);
@@ -371,14 +373,14 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends calendar.prototype */{
             content: [
                 {
                     elem: 'arrow',
-                    mods: {
+                    elemMods: {
                         direction: 'left',
                         disabled: !prevMonth
                     }
                 },
                 {
                     elem: 'arrow',
-                    mods: {
+                    elemMods: {
                         direction: 'right',
                         disabled: !nextMonth
                     }
