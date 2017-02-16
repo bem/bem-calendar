@@ -1,12 +1,12 @@
-# Календарь на bem-components
+# Calendar for bem-components
 
-![calendar](preview/desktop.png)
+![calendar](preview/desktop_en.png)
 
-На iOS и Android используется системный календарь.
+On iOS and Android system calendar is used.
 
-## Пример использования
+## Usage example
 
-Вместе с `input`:
+Together with `input`:
 ```js
 {
     block: 'input',
@@ -16,25 +16,26 @@
         theme: 'islands',
         readonly: true
     },
-    weekdays: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
-    months: ['Январь', 'Февраль', 'Март',
-        'Апрель', 'Май', 'Июнь',
-        'Июль', 'Август', 'Сентябрь',
-        'Октябрь', 'Ноябрь', 'Декабрь'],
-    val: '11.11.2015'
+    weekdays: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
+    months: ['January', 'February', 'March',
+        'April', 'May', 'June', 'July',
+        'August', 'September', 'October',
+        'November', 'December'],
+    val: '16.02.2017'
 }
 ```
 
-Как отдельный блок:
+As a separate block:
 ```js
 {
     block: 'calendar',
     js: {
-        weekdays: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
-        months: ['Январь', 'Февраль', 'Март',
-            'Апрель', 'Май', 'Июнь',
-            'Июль', 'Август', 'Сентябрь',
-            'Октябрь', 'Ноябрь', 'Декабрь'],
+        weekdays: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
+        months: ['January', 'February', 'March',
+            'April', 'May', 'June', 'July',
+            'August', 'September', 'October',
+            'November', 'December'],
+
     },
     mods: {
         theme: 'islands'
@@ -42,7 +43,7 @@
 }
 ```
 
-Есть возможность установить ограничения на выбор даты с помощью полей `earlierLimit` и `laterLimit`.
+You can set limits for dates using `earlierLimit` and `laterLimit` parameters.
 ```js
 {
     block: 'input',
@@ -52,14 +53,14 @@
         theme: 'islands',
         readonly: true
     },
-    weekdays: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
-    months: ['Январь', 'Февраль', 'Март',
-        'Апрель', 'Май', 'Июнь',
-        'Июль', 'Август', 'Сентябрь',
-        'Октябрь', 'Ноябрь', 'Декабрь'],
-    earlierLimit: '11.10.2015',
-    laterLimit: '11.12.2015',
-    val: '11.11.2015'
+    weekdays: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
+    months: ['January', 'February', 'March',
+            'April', 'May', 'June', 'July',
+            'August', 'September', 'October',
+            'November', 'December'],
+    earlierLimit: '13.02.2017',
+    laterLimit: '18.02.2017',
+    val: '17.02.2017'
 }
 ```
-![calendar](preview/limits.png)
+![calendar](preview/limits_en.png)
