@@ -268,7 +268,11 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             week = new Array(countDays),
             dateIterator = new Date(month.getTime());
 
-        for(dateIterator.setDate(1); dateIterator.getMonth() === month.getMonth(); dateIterator.setDate(dateIterator.getDate() + 1)) {
+        for(
+            dateIterator.setDate(1);
+            dateIterator.getMonth() === month.getMonth();
+            dateIterator.setDate(dateIterator.getDate() + 1)
+        ) {
             weekDay = (dateIterator.getDay() + lastDay) % countDays; // Получаем 0 - пн, 1 - вт, и т.д.
 
             week[weekDay] = new Date(dateIterator.getTime());
@@ -311,8 +315,10 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                     dayElem.attrs['data-day'] = _this._formatDate(day);
                 }
 
-                if(off || weekend) {
-                    dayElem.elemMods.type = weekend ? (off ? 'weekend-off' : 'weekend') : 'off';
+                if(weekend) {
+                    dayElem.elemMods.type = off ? 'weekend-off' : 'weekend';
+                } else if(off) {
+                    dayElem.elemMods.type = 'off';
                 }
 
                 if(day && val && day.getTime() === val.getTime()) {
@@ -380,7 +386,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 },  /** @lends calendar */ {
     lazyInit: false,
 
-    onInit: function () {
+    onInit: function() {
         this._domEvents('arrow').on('pointerclick', function(e) {
             var arrow = e.bemTarget;
             if(!arrow.hasMod('disabled')) {
