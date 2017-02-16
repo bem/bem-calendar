@@ -3,7 +3,8 @@ var enbBemTechs = require('enb-bem-techs'),
     isProd = process.env.YENV === 'production',
     bhOptions = {
         jsAttrName: 'data-bem',
-        jsAttrScheme: 'json'
+        jsAttrScheme: 'json',
+        xhtml: false
     };
 
 module.exports = function (config) {
@@ -14,28 +15,36 @@ module.exports = function (config) {
         levels: ['common.blocks', 'desktop.blocks'],
         sourceLevels: getDesktops(),
         engines: {
-            'bh@4': {
-                tech: 'enb-bh/techs/bh-commonjs',
-                options: { bhOptions: bhOptions }
-            },
-            'bh@3': {
+            bh: {
                 tech: 'enb-bh/techs/bh-commonjs',
                 options: {
-                    bhFilename: require.resolve('bh/lib/bh.js'),
                     bhOptions: bhOptions
                 }
             },
-            'bemhtml-dev': {
-                tech: 'enb-bemxjst/techs/bemhtml',
-                options: { devMode: true }
+            bhEscaped: {
+                tech: 'enb-bh/techs/bh-commonjs',
+                options: {
+                    bhOptions: Object.assign({}, bhOptions, {
+                        escapeContent: true
+                    })
+                }
             },
-            'bemhtml-prod': {
+            bemhtml: {
                 tech: 'enb-bemxjst/techs/bemhtml',
-                options: { devMode: false }
+                options: {
+                    sourceSuffixes: ['bemhtml.js', 'bemhtml'],
+                    engineOptions: { elemJsInstances: true }
+                }
             },
-            'bemhtml@bem-xjst-4': {
-                tech: 'enb-bemxjst-2/techs/bemhtml',
-                options: { exportName: 'BEMHTML' }
+            bemhtmlEscaped: {
+                tech: 'enb-bemxjst/techs/bemhtml',
+                options: {
+                    sourceSuffixes: ['bemhtml', 'bemhtml.js'],
+                    engineOptions: {
+                        elemJsInstances: true,
+                        escapeContent: true
+                    }
+                }
             }
         },
         depsTech: enbBemTechs.deps
@@ -49,22 +58,22 @@ module.exports = function (config) {
             [enbBemTechs.deps],
             [enbBemTechs.bemjsonToBemdecl],
             // ie.css
-            [require('enb/techs/css'), {
+            [require('enb-stylus/techs/stylus'), {
                 target: '?.ie.css',
                 sourceSuffixes: ['css', 'ie.css']
             }],
             // ie8.css
-            [require('enb/techs/css'), {
+            [require('enb-stylus/techs/stylus'), {
                 target: '?.ie8.css',
                 sourceSuffixes: ['css', 'ie8.css']
             }],
             // ie9.css
-            [require('enb/techs/css'), {
+            [require('enb-stylus/techs/stylus'), {
                 target: '?.ie9.css',
                 sourceSuffixes: ['css', 'ie9.css']
             }],
             // browser.js
-            [require('enb-diverse-js/techs/browser-js'), { target: '?.browser.js' }],
+            [require('enb-js/techs/browser-js'), { target: '?.browser.js' }],
             [require('enb/techs/file-merge'), {
                 target: '?.pre.js',
                 sources: ['?.browser.bh.js', '?.browser.js']
@@ -102,7 +111,7 @@ module.exports = function (config) {
             // html
             [require('enb-bh/techs/bemjson-to-html')],
             // borschik
-            [borschikTech, { sourceTarget: '?.css', destTarget: '?.min.css', tech: 'cleancss', minify: isProd }],
+            [borschikTech, { sourceTarget: '?.css', destTarget: '?.min.css', minify: isProd }],
             [borschikTech, { sourceTarget: '?.ie.css', destTarget: '?.ie.min.css', minify: isProd }],
             [borschikTech, { sourceTarget: '?.ie8.css', destTarget: '?.ie8.min.css', minify: isProd }],
             [borschikTech, { sourceTarget: '?.ie9.css', destTarget: '?.ie9.min.css', minify: isProd }],
@@ -176,8 +185,6 @@ function getTouchPads() {
         { path: 'libs/bem-components/common.blocks', check: false },
         { path: 'libs/bem-components/design/common.blocks', check: false },
         { path: 'libs/bem-components/touch.blocks', check: false },
-        { path: 'libs/bem-components/design/touch.blocks', check: false },
-        { path: 'libs/bem-components/design/touch-pad.blocks', check: false },
         'common.blocks',
         'touch.blocks'
     ];
@@ -190,8 +197,6 @@ function getTouchPhones() {
         { path: 'libs/bem-components/common.blocks', check: false },
         { path: 'libs/bem-components/design/common.blocks', check: false },
         { path: 'libs/bem-components/touch.blocks', check: false },
-        { path: 'libs/bem-components/design/touch.blocks', check: false },
-        { path: 'libs/bem-components/design/touch-phone.blocks', check: false },
         'common.blocks',
         'touch.blocks',
         'touch-phone.blocks'
