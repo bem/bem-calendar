@@ -1,7 +1,7 @@
 /**
  * @module input
  */
-modules.define('input', ['i-bem__dom', 'jquery', 'ua'], function(provide, BEMDOM, $, ua) {
+modules.define('input', ['i-bem-dom', 'jquery', 'ua'], function(provide, bemDom, $, ua, Input) {
 
 /**
  * @exports
@@ -9,7 +9,7 @@ modules.define('input', ['i-bem__dom', 'jquery', 'ua'], function(provide, BEMDOM
  * @augments control
  * @bem
  */
-provide(BEMDOM.decl({ block: this.name, modName: 'has-calendar' }, /** @lends input.prototype */{
+provide(Input.declMod({ modName: 'has-calendar', modVal: 'true' }, /** @lends input.prototype */{
     onSetMod: {
         js: function() {
             this.__base.apply(this, arguments);
@@ -32,19 +32,19 @@ provide(BEMDOM.decl({ block: this.name, modName: 'has-calendar' }, /** @lends in
     },
 
     _initWP7Calendar: function() {
-        this.setMod(this.elem('calendar'), 'wp7', true);
+        this._elem('calendar').setMod('wp7', true);
     },
 
     _initIosNativeCalendar: function() {
-        this.unbindFromDoc('pointerdown');
-        this.unbindFrom('control', 'pointerclick blur focus');
-        this.unbindFrom('calendar', 'pointerclick');
+        this._domEvents(bemDom.doc).un('pointerdown');
+        this._domEvents('control').un('pointerclick blur focus');
+        this._domEvents('calendar').un('pointerclick');
 
         this.domElem.append($('<input class="input__ios-calendar" type="date" value=""/>'));
 
         // Forwarding date to base input
-        this.bindTo('ios-calendar', 'change', function() {
-            var val = this.elem('ios-calendar').val().split('-').reverse().join('.');
+        this._domEvents('ios-calendar').on('change', function() {
+            var val = this._elem('ios-calendar').domElem.val().split('-').reverse().join('.');
             this.setVal(val);
         });
     }

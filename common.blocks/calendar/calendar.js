@@ -4,23 +4,7 @@
 modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'popup'], function(provide, bemDom, BEMHTML, $, Popup) {
 
 function compareMonths(a, b) {
-    if(a.getFullYear() > b.getFullYear()) {
-        return 1;
-    }
-
-    if(a.getFullYear() < b.getFullYear()) {
-        return -1;
-    }
-
-    if(a.getMonth() > b.getMonth()) {
-        return 1;
-    }
-
-    if(a.getMonth() < b.getMonth()) {
-        return -1;
-    }
-
-    return 0;
+    return (a.getFullYear() - b.getFullYear()) * 100 + a.getMonth() - b.getMonth();
 }
 
 function leadZero(num) {
@@ -59,7 +43,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
                 this._val = null;
 
-                this._popup = this.domElem.bem(Popup);
+                this._popup = this.findMixedBlock(Popup);
 
                 this._month = this._getToday();
                 this._month.setDate(1);
@@ -398,9 +382,9 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
     onInit: function () {
         this._domEvents('arrow').on('pointerclick', function(e) {
-            var elem = $(e.currentTarget);
-            if(!this.hasMod(elem, 'disabled')) {
-                this.switchMonth(this.hasMod(elem, 'direction', 'left') ? -1 : 1);
+            var arrow = e.bemTarget;
+            if(!arrow.hasMod('disabled')) {
+                this.switchMonth(arrow.hasMod('direction', 'left') ? -1 : 1);
             }
         });
 

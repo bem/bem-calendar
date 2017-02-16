@@ -2,9 +2,6 @@ block('input').mod('has-calendar', true)(
     def()(function() {
         var ctx = this.ctx;
 
-        ctx.js || (ctx.js = {});
-        ctx.js.lazyInit = false;
-
         return applyNext({ _calendar: {
             earlierLimit: ctx.earlierLimit,
             laterLimit: ctx.laterLimit,

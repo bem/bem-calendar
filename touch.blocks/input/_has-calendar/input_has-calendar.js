@@ -1,7 +1,7 @@
 /**
  * @module input
  */
-modules.define('input', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('input', function(provide, Input) {
 
 /**
  * @exports
@@ -9,10 +9,10 @@ modules.define('input', ['i-bem__dom'], function(provide, BEMDOM) {
  * @augments control
  * @bem
  */
-provide(BEMDOM.decl({ block : this.name, modName: 'has-calendar' }, /** @lends input.prototype */{
+provide(Input.declMod({ modName: 'has-calendar', modVal: 'true' }, /** @lends input.prototype */{
     onSetMod: {
         js: function() {
-            this.elem('control').attr('readonly', 'readonly');
+            this._elem('control').domElem.attr('readonly', 'readonly');
 
             this.__base.apply(this, arguments);
         }
