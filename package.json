@@ -39,7 +39,10 @@
     "enb-magic-factory": "^0.5.0",
     "enb-magic-platform": "^0.7.0",
     "enb-modules": "^0.4.0",
-    "enb-stylus": "^2.4.0"
+    "enb-stylus": "^2.4.0",
+    "eslint": "^3.15.0",
+    "eslint-config-pedant": "^0.8.0",
+    "eslint-plugin-bem-xjst": "^2.1.0"
   },
   "peerDependencies": {
     "bem-components": "^5.0.0"
@@ -47,7 +50,8 @@
   "scripts": {
     "deps": "bower install",
     "start": "enb server",
-    "test": "npm run deps && magic run tmpl-specs"
+    "lint": "eslint .",
+    "test": "npm run lint && npm run deps && magic run tmpl-specs"
   },
   "engines": {
     "node": ">=4"

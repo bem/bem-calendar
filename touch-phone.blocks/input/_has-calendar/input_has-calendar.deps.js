@@ -1,5 +1,5 @@
 ({
     shouldDeps: [
-        { elems: [ 'ios-calendar', 'calendar-popup', 'ua' ] }
+        { elems: ['ios-calendar', 'calendar-popup', 'ua'] }
     ]
-})
+});

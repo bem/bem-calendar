@@ -57,7 +57,9 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: 'true' }, /** @lends in
             try {
                 isSupport = $('<input>').prop('type', 'date').prop('type') === 'date' &&
                     (ua.ios > '5' || (ua.android && ua.chrome > '20') || ua.opera > '15');
-            } catch(e) {}
+            } catch(e) {
+                //
+            }
 
             this._isNativeDateSupport = isSupport;
         }

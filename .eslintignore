@@ -1,0 +1,3 @@
+*.bundles/*
+*.tmpl-specs/*
+libs/*
