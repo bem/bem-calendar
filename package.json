@@ -46,7 +46,8 @@
   },
   "scripts": {
     "deps": "bower install",
-    "start": "enb server"
+    "start": "enb server",
+    "test": "npm run deps && magic run tmpl-specs"
   },
   "engines": {
     "node": ">=4"
