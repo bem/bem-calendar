@@ -71,7 +71,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     /**
      * Set value
      *
-     * @param {Date|String} val - Date or date string
+     * @param {Date|String} val - Date or date as string
      * @returns {Calendar} this
      */
     setVal: function(val) {
@@ -136,7 +136,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     /**
      * Parse date
      *
-     * @param {Date|String} val - Date or Date like string
+     * @param {Date|String} val - Date or date as string
      * @returns {?Date}
      */
     parseDate: function(val) {

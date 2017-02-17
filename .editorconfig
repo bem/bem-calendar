@@ -15,7 +15,7 @@ insert_final_newline = true
 [*.{bemjson.js,deps.js}]
 indent_size = 4
 
-[{data-stub/**.json,*.json}]
+[*.json]
 indent_size = 2
 
 [*.yml]
