@@ -31,8 +31,7 @@ function parseDateParts(str) {
 
 /**
  * @exports
- * @class calendar
- * @augments control
+ * @class Calendar
  * @bem
  */
 provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
@@ -72,8 +71,8 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     /**
      * Set value
      *
-     * @param {Date|string} val
-     * @returns {calendar} this
+     * @param {Date|String} val - Date or date as string
+     * @returns {Calendar} this
      */
     setVal: function(val) {
         var date = this.parseDate(val);
@@ -123,7 +122,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     /**
      * Switch month
      *
-     * @param {number} step
+     * @param {Number} step - Months count
      * @returns {calendar} this
      */
     switchMonth: function(step) {
@@ -137,13 +136,11 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     /**
      * Parse date
      *
-     * param {Date|string} val
-     * @returns {?Date} this
+     * @param {Date|String} val - Date or date as string
+     * @returns {?Date}
      */
     parseDate: function(val) {
-        if(val instanceof Date) {
-            return val;
-        }
+        if(val instanceof Date) return val;
 
         var parsed = parseDateParts(val);
         if(parsed) {
@@ -167,7 +164,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     /**
      * Set target
      *
-     * @param {jQuery|BEMDOM} anchor - DOM elem or anchor BEMDOM block.
+     * @param {jQuery|Function} anchor - DOM elem or anchor Bem block.
      * @returns {calendar} this
      */
     setAnchor: function(anchor) {
@@ -179,7 +176,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     /**
      * Sets directions for calendar.
      *
-     * @param {Array<string>} directions
+     * @param {Array<String>} directions - @see Popup.directions
      * @returns {calendar} this
      */
     setDirections: function(directions) {
@@ -191,8 +188,8 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     /**
      * Sets limits
      *
-     * @param {Date|String} earlier
-     * @param {Date|String} later
+     * @param {Date|String} [earlier] - left limit
+     * @param {Date|String} [later] - right limit
      * @returns {calendar} this
      */
     setLimits: function(earlier, later) {
