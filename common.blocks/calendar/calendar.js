@@ -259,7 +259,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
         this._popup.setContent(calendar);
     },
-    _calcNorthAmericanWeeks: function (month) {
+    _calcNorthAmericanWeeks: function(month) {
         var weekDay,
             weeks = [],
             countDays = 7,
@@ -267,7 +267,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             week = new Array(countDays),
             dateIterator = new Date(month.getTime());
 
-        for (
+        for(
             dateIterator.setDate(1);
             dateIterator.getMonth() === month.getMonth();
             dateIterator.setDate(dateIterator.getDate() + 1)
@@ -276,13 +276,13 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             weekDay = dateIterator.getDay(); // Получаем 0 - вс, 1 - пн, 2 - вт, и т.д.
             week[weekDay] = new Date(dateIterator.getTime());
 
-            if (weekDay === lastDay) {
+            if(weekDay === lastDay) {
                 weeks.push(week);
                 week = new Array(countDays);
                 week[0] = new Date(dateIterator.getTime()); // Переносим ВС на след. неделю
             }
         }
-        if (weekDay !== lastDay) {
+        if(weekDay !== lastDay) {
             weeks.push(week);
         }
         return weeks;
@@ -321,14 +321,13 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         var rows = [],
             weeks = this.params.northAmericanSystem ? this._calcNorthAmericanWeeks(month) : this._calcWeeks(month);
 
-
         weeks.forEach(function(week) {
             var row = [],
                 _this = this;
             $.each(week, function(i, day) {
                 var off = !_this._isValidDate(day),
                     val = _this.getVal(),
-                    weekend = _this.params.northAmericanSystem ? (i===0 || i===6) : i > 4,
+                    weekend = _this.params.northAmericanSystem ? (i === 0 || i === 6) : i > 4,
                     dayElem = {
                         elem: 'day',
                         tag: 'td',
@@ -365,7 +364,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
     _buildShortWeekdays: function() {
         var row = [],
-            _this=this;
+            _this = this;
 
         this.params.weekdays.forEach(function(name, i) {
             var dayname = {
@@ -374,11 +373,11 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                 content: name
             };
 
-            if(_this.params.northAmericanSystem){
-                if(i===0 || i ===6){
+            if(_this.params.northAmericanSystem) {
+                if(i === 0 || i === 6) {
                     dayname.elemMods = { type: 'weekend' };
                 }
-            } else{
+            } else {
             if(i > 4) {
                 dayname.elemMods = { type: 'weekend' };
                 }

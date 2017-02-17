@@ -9,7 +9,7 @@ module.exports = function(bh) {
             laterLimit: json.laterLimit,
             weekdays: json.weekdays,
             months: json.months,
-            northAmericanSystem:json.northAmericanSystem
+            northAmericanSystem: json.northAmericanSystem
         });
     });
 
