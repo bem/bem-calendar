@@ -63,3 +63,23 @@
 }
 ```
 ![calendar](preview/limits.png)
+
+Северо-Американский формат календаря может быть включен, используя `northAmericanSystem` и выставив Воскресенье, как первый день в массиве дней недели.
+```js
+{
+    block: 'input',
+    mods: {
+        'has-calendar': true,
+        size: 'm',
+        theme: 'islands',
+        readonly: true
+    },
+    weekdays: ['su','mo', 'tu', 'we', 'th', 'fr', 'sa'],
+    months: ['January', 'February', 'March',
+            'April', 'May', 'June', 'July',
+            'August', 'September', 'October',
+            'November', 'December'],
+    northAmericanSystem:true
+}
+```
+![calendar](preview/preview_na.png)
