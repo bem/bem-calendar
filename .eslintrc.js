@@ -90,7 +90,6 @@ module.exports = {
         yoda: [2, 'never'],
         'wrap-iife': [2, 'any'],
         'no-nested-ternary': 'error',
-        'no-unneeded-ternary': 'error',
-        'valid-jsdoc': 1
+        'no-unneeded-ternary': 'error'
     }
 };
