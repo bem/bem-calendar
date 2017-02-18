@@ -13,8 +13,7 @@
     mods: {
         'has-calendar': true,
         size: 'm',
-        theme: 'islands',
-        readonly: true
+        theme: 'islands'
     },
     weekdays: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
     months: ['Январь', 'Февраль', 'Март',
@@ -49,8 +48,7 @@
     mods: {
         'has-calendar': true,
         size: 'm',
-        theme: 'islands',
-        readonly: true
+        theme: 'islands'
     },
     weekdays: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
     months: ['Январь', 'Февраль', 'Март',

@@ -13,8 +13,7 @@ Together with `input`:
     mods: {
         'has-calendar': true,
         size: 'm',
-        theme: 'islands',
-        readonly: true
+        theme: 'islands'
     },
     weekdays: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
     months: ['January', 'February', 'March',
@@ -50,8 +49,7 @@ You can set limits for dates using `earlierLimit` and `laterLimit` parameters.
     mods: {
         'has-calendar': true,
         size: 'm',
-        theme: 'islands',
-        readonly: true
+        theme: 'islands'
     },
     weekdays: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
     months: ['January', 'February', 'March',
