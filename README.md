@@ -74,7 +74,7 @@ Date format: `mm/dd/yyyy`
         'has-calendar': true,
         size: 'm',
         theme: 'islands',
-        format: 'north-american'
+        'calendar-format': 'north-american'
     },
     weekdays: ['su','mo', 'tu', 'we', 'th', 'fr', 'sa'],
     months: ['January', 'February', 'March',

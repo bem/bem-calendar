@@ -7,7 +7,7 @@
             elems: ['arrow', 'day', 'dayname']
         },
         {
-            mods: { theme: 'islands', format: 'north-american' }
+            mods: { theme: 'islands' }
         },
         {
             block: 'popup',

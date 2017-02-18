@@ -204,9 +204,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
      * @returns {?DateHash} output date
      */
     _parseDateParts: function(str) {
-        var match;
-
-        match = /^\s*(\d{1,2})[./-](\d{1,2})(?:[./-](\d{4}|\d\d))?\s*$/.exec(str);
+        var match = /^\s*(\d{1,2})[./-](\d{1,2})(?:[./-](\d{4}|\d\d))?\s*$/.exec(str);
 
         if(match) {
             return {
@@ -291,14 +289,9 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             dateIterator.getMonth() === month.getMonth();
             dateIterator.setDate(dateIterator.getDate() + 1)
         ) {
-            weekDay = (dateIterator.getDay() + lastDay) % countDays; // Получаем 0 - пн, 1 - вт, и т.д.
-
-            week[weekDay] = new Date(dateIterator.getTime());
-
-            if(weekDay === lastDay) {
-                weeks.push(week);
-                week = new Array(countDays);
-            }
+            var iterationResult = this._processWeek(dateIterator, week, weeks, lastDay, countDays);
+            week = iterationResult.week;
+            weekDay = iterationResult.weekDay;
         }
 
         if(weekDay !== lastDay) {
@@ -307,7 +300,17 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
         return weeks;
     },
+    _processWeek: function(dateIterator, week, weeks, lastDay, countDays) {
+        var weekDay = (dateIterator.getDay() + lastDay) % countDays; // Получаем 0 - пн, 1 - вт, и т.д.
 
+        week[weekDay] = new Date(dateIterator.getTime());
+
+        if(weekDay === lastDay) {
+            weeks.push(week);
+            week = new Array(countDays);
+        }
+        return { week: week, weekDay: weekDay };
+    },
     _buildMonth: function(month) {
         var rows = [];
 

@@ -1,17 +1,11 @@
 modules.define('calendar', function(provide, Calendar) {
 
     provide(Calendar.declMod({ modName: 'format', modVal: 'north-american' }, {
-        onSetMod: {
-            js: {
-                inited: function() {
-                    this.__base.apply(this, arguments);
-                }
-            }
-        },
-        _formatDate: function() {
-            var dateArray = this.__base.apply(this, arguments).split('.');
-            swap(dateArray, 0, 1);
-            return dateArray.join('/');
+        _formatDate: function(date) {
+
+            var month = date.getMonth() + 1,
+                day = date.getDate();
+            return [month < 10 ? '0' + month : month, day < 10 ? '0' + day : day, date.getFullYear()].join('/');
         },
         _parseDateParts: function() {
             var date = this.__base.apply(this, arguments);
@@ -23,42 +17,19 @@ modules.define('calendar', function(provide, Calendar) {
                 };
             }
         },
-        _calcWeeks: function(month) {
-            var weekDay,
-                weeks = [],
-                countDays = 7,
-                lastDay = 6,
-                week = new Array(countDays),
-                dateIterator = new Date(month.getTime());
+        _processWeek: function(dateIterator, week, weeks, lastDay, countDays) {
+            var weekDay = dateIterator.getDay();
+            week[weekDay] = new Date(dateIterator.getTime());
 
-            for(
-                dateIterator.setDate(1);
-                dateIterator.getMonth() === month.getMonth();
-                dateIterator.setDate(dateIterator.getDate() + 1)
-            ) {
-
-                weekDay = dateIterator.getDay();
-                week[weekDay] = new Date(dateIterator.getTime());
-
-                if(weekDay === lastDay) {
-                    weeks.push(week);
-                    week = new Array(countDays);
-                    week[0] = new Date(dateIterator.getTime());
-                }
-            }
-            if(weekDay !== lastDay) {
+            if(weekDay === lastDay) {
                 weeks.push(week);
+                week = new Array(countDays);
+                week[0] = new Date(dateIterator.getTime());
             }
-            return weeks;
+            return { week: week, weekDay: weekDay };
         },
         _isWeekend: function(dayNumber) {
             return dayNumber === 0 || dayNumber === 6;
         }
     }));
-
-    function swap(arr, x, y) {
-        var temp = arr[x];
-        arr[x] = arr[y];
-        arr[y] = temp;
-    }
 });

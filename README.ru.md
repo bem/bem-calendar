@@ -73,7 +73,7 @@ Date format: `mm/dd/yyyy`
         'has-calendar': true,
         size: 'm',
         theme: 'islands',
-        format: 'north-american'
+        'calendar-format': 'north-american'
     },
     weekdays: ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'],
     months: ['Январь', 'Февраль', 'Март',
