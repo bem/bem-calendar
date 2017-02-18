@@ -29,8 +29,7 @@
                 mods: {
                     theme: 'islands',
                     size: 'm',
-                    'has-calendar': true,
-                    'calendar-format':'north-american'
+                    'has-calendar': true
                 },
                 weekdays: ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'],
                 months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
