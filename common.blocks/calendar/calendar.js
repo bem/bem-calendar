@@ -132,7 +132,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
         return this;
     },
-
     /**
      * Parse date
      *
@@ -228,7 +227,9 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         return !(this._earlierLimit && date < this._earlierLimit ||
             this._laterLimit && date > this._laterLimit);
     },
-
+    _isWeekend: function(dayNumber) {
+        return dayNumber > 4;
+    },
     _build: function() {
         var rows = [];
 
@@ -296,7 +297,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             $.each(week, function(i, day) {
                 var off = !_this._isValidDate(day),
                     val = _this.getVal(),
-                    weekend = i > 4,
+                    weekend = _this._isWeekend(i),
                     dayElem = {
                         elem: 'day',
                         tag: 'td',
@@ -332,7 +333,8 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     },
 
     _buildShortWeekdays: function() {
-        var row = [];
+        var row = [],
+            _this = this;
 
         this.params.weekdays.forEach(function(name, i) {
             var dayname = {
@@ -341,7 +343,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                 content: name
             };
 
-            if(i > 4) {
+            if(_this._isWeekend(i)) {
                 dayname.elemMods = { type: 'weekend' };
             }
 

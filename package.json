@@ -51,6 +51,7 @@
     "deps": "bower install",
     "start": "enb server",
     "lint": "eslint .",
+    "fix":"eslint . --fix",
     "test": "npm run lint && npm run deps && magic run tmpl-specs"
   },
   "engines": {
