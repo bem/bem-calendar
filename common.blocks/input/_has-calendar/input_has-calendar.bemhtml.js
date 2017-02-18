@@ -15,7 +15,6 @@ block('input').mod('has-calendar', true)(
             { elem: 'calendar' },
             {
                 block: 'calendar',
-                mods: { theme: 'islands' },
                 js: this._calendar
             }
         ];
