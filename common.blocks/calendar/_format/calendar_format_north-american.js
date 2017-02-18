@@ -15,7 +15,6 @@ modules.define('calendar', ['i-bem-dom'], function(provide, Calendar, bemDom) {
     }));
 
     function formatDate(date) {
-        console.log(date);
         var year = date.getFullYear(),
             month = date.getMonth() + 1,
             day = date.getDate();
