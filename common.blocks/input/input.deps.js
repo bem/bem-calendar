@@ -1,6 +1,6 @@
 ({
     tech: 'tmpl-spec.js',
-    mustDeps: [
+    shouldDeps: [
         { tech: 'bemhtml', block: 'input', mods: { 'has-calendar': true } }
     ]
 });

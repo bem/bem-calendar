@@ -20,8 +20,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     onSetMod: {
         js: {
             inited: function() {
-                this.__base.apply(this, arguments);
-
                 this._val = null;
 
                 this._popup = this.findMixedBlock(Popup);
@@ -403,31 +401,34 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                 }
             ]
         };
+    },
+
+    _onArrowClick: function(e) {
+        var arrow = e.bemTarget;
+        if(!arrow.hasMod('disabled')) {
+            this.switchMonth(arrow.hasMod('direction', 'left') ? -1 : 1);
+        }
+    },
+
+    _onDayClick: function(e) {
+        var date = $(e.currentTarget).data('day');
+        if(!date) return;
+
+        this.setVal(date);
+        this.hide();
+
+        var val = this.getVal();
+        this._emit('change', {
+            value: val,
+            formated: this._formatDate(val)
+        });
     }
 },  /** @lends calendar */ {
     lazyInit: false,
 
     onInit: function() {
-        this._domEvents('arrow').on('pointerclick', function(e) {
-            var arrow = e.bemTarget;
-            if(!arrow.hasMod('disabled')) {
-                this.switchMonth(arrow.hasMod('direction', 'left') ? -1 : 1);
-            }
-        });
-
-        this._domEvents('day').on('pointerclick', function(e) {
-            var date = $(e.currentTarget).data('day');
-            if(date) {
-                this.setVal(date);
-                this.hide();
-
-                var val = this.getVal();
-                this._emit('change', {
-                    value: val,
-                    formated: this._formatDate(val)
-                });
-            }
-        });
+        this._domEvents('arrow').on('pointerclick', this.prototype._onArrowClick);
+        this._domEvents('day').on('pointerclick', this.prototype._onDayClick);
     }
 }));
 
