@@ -64,3 +64,23 @@ You can set limits for dates using `earlierLimit` and `laterLimit` parameters.
 }
 ```
 ![calendar](preview/limits_en.png)
+
+North-American calendar format can be enabled via `northAmericanSystem` property and setting first day of weekdays array to Sunday.
+```js
+{
+    block: 'input',
+    mods: {
+        'has-calendar': true,
+        size: 'm',
+        theme: 'islands',
+        readonly: true
+    },
+    weekdays: ['su','mo', 'tu', 'we', 'th', 'fr', 'sa'],
+    months: ['January', 'February', 'March',
+            'April', 'May', 'June', 'July',
+            'August', 'September', 'October',
+            'November', 'December'],
+    northAmericanSystem:true
+}
+```
+![calendar](preview/preview_na_en.png)
