@@ -21,7 +21,8 @@ module.exports = function(bh) {
             {
                 block: 'calendar',
                 mods: {
-                    theme: 'islands'
+                    theme: 'islands',
+                    format: ctx.node.mods && ctx.node.mods['calendar-format']
                 },
                 js: ctx.tParam('calendar')
             }

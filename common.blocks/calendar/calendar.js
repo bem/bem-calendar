@@ -11,24 +11,6 @@ function leadZero(num) {
     return num < 10 ? '0' + num : num;
 }
 
-function parseDateParts(str) {
-    var match;
-
-    match = /^\s*(\d{1,2})[./-](\d{1,2})(?:[./-](\d{4}|\d\d))?\s*$/.exec(str);
-
-    if(match) {
-        return [match[1], match[2] - 1, match[3]];
-    }
-
-    match = /^\s*(\d{4})[./-](\d\d)(?:[./-](\d\d))?\s*$/.exec(str);
-
-    if(match) {
-        return [match[3], match[2] - 1, match[1]];
-    }
-
-    return null;
-}
-
 /**
  * @exports
  * @class Calendar
@@ -130,7 +112,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
         return this;
     },
-
     /**
      * Parse date
      *
@@ -140,11 +121,11 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     parseDate: function(val) {
         if(val instanceof Date) return val;
 
-        var parsed = parseDateParts(val);
+        var parsed = this._parseDateParts(val);
         if(parsed) {
-            var day = parsed[0],
-                month = parsed[1],
-                year = parsed[2],
+            var day = parsed.day,
+                month = parsed.month,
+                year = parsed.year,
                 date = this._getToday();
 
             date.setMonth(month, day);
@@ -206,7 +187,43 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
         return this;
     },
+    /**
+     * @typedef {object} DateHash
+     *
+     * @param {Number|String} day
+     * @param {Number|String} month
+     * @param {Number|String} year
+     */
 
+    /**
+     * Parses string date
+     *
+     * @param {Date|String} [str] - input date
+     * @returns {?DateHash} output date
+     */
+    _parseDateParts: function(str) {
+        var match = /^\s*(\d{1,2})[./-](\d{1,2})(?:[./-](\d{4}|\d\d))?\s*$/.exec(str);
+
+        if(match) {
+            return {
+                day: match[1],
+                month: match[2] - 1,
+                year: match[3]
+            };
+        }
+
+        match = /^\s*(\d{4})[./-](\d\d)(?:[./-](\d\d))?\s*$/.exec(str);
+
+        if(match) {
+            return {
+                day: match[3],
+                month: match[2] - 1,
+                year: match[1]
+            };
+        }
+
+        return null;
+    },
     _getToday: function() {
         var today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -226,7 +243,9 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         return !(this._earlierLimit && date < this._earlierLimit ||
             this._laterLimit && date > this._laterLimit);
     },
-
+    _isWeekend: function(dayNumber) {
+        return dayNumber > 4;
+    },
     _build: function() {
         var rows = [];
 
@@ -268,14 +287,9 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             dateIterator.getMonth() === month.getMonth();
             dateIterator.setDate(dateIterator.getDate() + 1)
         ) {
-            weekDay = (dateIterator.getDay() + lastDay) % countDays; // Получаем 0 - пн, 1 - вт, и т.д.
-
-            week[weekDay] = new Date(dateIterator.getTime());
-
-            if(weekDay === lastDay) {
-                weeks.push(week);
-                week = new Array(countDays);
-            }
+            var iterationResult = this._processWeek(dateIterator, week, weeks, lastDay, countDays);
+            week = iterationResult.week;
+            weekDay = iterationResult.weekDay;
         }
 
         if(weekDay !== lastDay) {
@@ -284,7 +298,17 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
         return weeks;
     },
+    _processWeek: function(dateIterator, week, weeks, lastDay, countDays) {
+        var weekDay = (dateIterator.getDay() + lastDay) % countDays; // Получаем 0 - пн, 1 - вт, и т.д.
 
+        week[weekDay] = new Date(dateIterator.getTime());
+
+        if(weekDay === lastDay) {
+            weeks.push(week);
+            week = new Array(countDays);
+        }
+        return { week: week, weekDay: weekDay };
+    },
     _buildMonth: function(month) {
         var rows = [];
 
@@ -294,7 +318,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             $.each(week, function(i, day) {
                 var off = !_this._isValidDate(day),
                     val = _this.getVal(),
-                    weekend = i > 4,
+                    weekend = _this._isWeekend(i),
                     dayElem = {
                         elem: 'day',
                         tag: 'td',
@@ -339,12 +363,12 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                 content: name
             };
 
-            if(i > 4) {
+            if(this._isWeekend(i)) {
                 dayname.elemMods = { type: 'weekend' };
             }
 
             row.push(dayname);
-        });
+        }, this);
 
         return row;
     },

@@ -64,3 +64,26 @@ You can set limits for dates using `earlierLimit` and `laterLimit` parameters.
 }
 ```
 ![calendar](preview/limits_en.png)
+
+North-American date and calendar format can be enabled by using `format:'north-american'` modifier.
+Date format: `mm/dd/yyyy`
+```js
+{
+    block: 'input',
+    mods: {
+        'has-calendar': true,
+        size: 'm',
+        theme: 'islands',
+        'calendar-format': 'north-american'
+    },
+    weekdays: ['su','mo', 'tu', 'we', 'th', 'fr', 'sa'],
+    months: ['January', 'February', 'March',
+            'April', 'May', 'June', 'July',
+            'August', 'September', 'October',
+            'November', 'December'],
+    earlierLimit: '02.13.2017',
+    laterLimit: '02.18.2017',
+    val: '02.17.2017'
+}
+```
+![calendar](preview/na_en.png)
