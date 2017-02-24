@@ -1,10 +1,5 @@
-block('calendar').mix()(function() {
-    return {
-        block: 'popup',
-        mods: {
-            'has-calendar': true,
-            target: 'anchor',
-            theme: this.mods.theme
-        }
-    };
-});
+block('calendar')(
+    js()(function() {
+        return { val: this.ctx.val };
+    })
+);
