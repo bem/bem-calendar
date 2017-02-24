@@ -4,15 +4,9 @@
             block: 'i-bem-dom'
         },
         shouldDeps: [
+            { block: 'jquery', elem: 'event', mods: { type: 'pointer' } },
             {
-                elems: ['arrow', 'day', 'dayname']
-            },
-            {
-                block: 'popup',
-                mods: {
-                    theme: 'islands',
-                    target: 'anchor'
-                }
+                elem: ['arrow', 'day', 'dayname']
             }
         ]
     },
