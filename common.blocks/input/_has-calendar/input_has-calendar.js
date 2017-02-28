@@ -1,7 +1,7 @@
 /**
  * @module input
  */
-modules.define('input', ['i-bem-dom', 'jquery', 'dom', 'calendar'], function(provide, bemDom, $, dom, Calendar, Input) {
+modules.define('input', ['i-bem-dom', 'jquery', 'dom', 'calendar', 'popup'], function(provide, bemDom, $, dom, Calendar, Popup, Input) {
 
 /**
  * @exports
@@ -15,17 +15,29 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
             inited: function() {
                 this.__base.apply(this, arguments);
 
-                this._calendar = this.findChildBlock(Calendar)
-                    .setVal(this.getVal())
-                    .setAnchor(this.domElem);
+                this._popup = this.findChildBlock(Popup);
+                this.setAnchor(this.domElem);
 
+                this._calendar = this.findChildBlock(Calendar)
+                    .setVal(this.getVal());
+
+                this._shouldShowCalendar = false;
                 this._events(this._calendar).on('change', function(e, data) {
-                    this.setVal(data.formated);
+                    this._needShowCalendar = false;
+
+                    this
+                        .setVal(data.formated)
+                        .setMod('focused');
+                    this.hide();
                 });
 
                 this._domEvents(bemDom.doc).on('pointerdown', function(e) {
                     var target = $(e.target),
                         insideCalendar = dom.contains(this._calendar.domElem, target);
+
+                    if(!insideCalendar && e.target !== this._elem('calendar').domElem[0]) {
+                        this._needShowCalendar = true;
+                    }
 
                     this._ignoreBlur = insideCalendar;
                 });
@@ -39,11 +51,14 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
             'true': function() {
                 this.__base.apply(this, arguments);
 
-                if(this._calendar.isShown()) return;
+                if(!this._needShowCalendar) {
+                    this._needShowCalendar = true;
+                    return;
+                }
 
-                this._calendar
-                    .setVal(this.getVal())
-                    .show();
+                if(this.isShown()) return;
+
+                this.show();
             },
             '': function() {
                 this.__base.apply(this, arguments);
@@ -51,23 +66,78 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
                 if(this._ignoreBlur) {
                     this._ignoreBlur = false;
                 } else {
-                    this._calendar.hide();
+                    this.hide();
                 }
             }
         }
     },
-    onCalendarClick: function() {
-        if(this._calendar.isShown()) {
-            this._calendar.hide();
+    _onPointerclick: function(e) {
+        this.__base.apply(this, arguments);
+
+        if(this.hasMod('disabled') || this.isShown()) return;
+
+        if(e.target === this._elem('calendar').domElem[0]) {
+            this._needShowCalendar = true;
+            return;
+        }
+
+        this.show();
+    },
+    _onCalendarClick: function() {
+        if(this.isShown()) {
+            this.hide();
         } else {
             this._calendar
-                .setVal(this.getVal())
-                .show();
+                .setVal(this.getVal());
+            this.show();
         }
+    },
+    /**
+     * Is shown calendar?
+     *
+     * @returns {boolean}
+     */
+    isShown: function() {
+        return this._popup.hasMod('visible');
+    },
+
+    /**
+     * Set target
+     *
+     * @param {jQuery|Function} anchor - DOM elem or anchor Bem block.
+     * @returns {input} this
+     */
+    setAnchor: function(anchor) {
+        this._popup.setAnchor(anchor);
+        return this;
+    },
+
+    /**
+     * Show calendar
+     *
+     * @returns {input} this
+     */
+    show: function() {
+        this._calendar._build();
+        this._popup.setMod('visible', true);
+
+        return this;
+    },
+
+    /**
+     * Hide calendar
+     *
+     * @returns {input} this
+     */
+    hide: function() {
+        this._popup.delMod('visible');
+
+        return this;
     }
 }, {
     onInit: function() {
-        this._domEvents('calendar').on('pointerclick', this.prototype.onCalendarClick);
+        this._domEvents().on('pointerclick', this.prototype._onPointerclick);
+        this._domEvents('calendar').on('pointerclick', this.prototype._onCalendarClick);
 
         this.__base.apply(this, arguments);
     }

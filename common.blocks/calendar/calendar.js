@@ -1,7 +1,7 @@
 /**
  * @module calendar
  */
-modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'popup'], function(provide, bemDom, BEMHTML, $, Popup) {
+modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery'], function(provide, bemDom, BEMHTML, $) {
 
 function compareMonths(a, b) {
     return (a.getFullYear() - b.getFullYear()) * 100 + a.getMonth() - b.getMonth();
@@ -21,8 +21,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         js: {
             inited: function() {
                 this._val = null;
-
-                this._popup = this.findMixedBlock(Popup);
+                this._selectedDayElem = null;
 
                 this._month = this._getToday();
                 this._month.setDate(1);
@@ -31,10 +30,11 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                     this.params.earlierLimit,
                     this.params.laterLimit
                 );
+                this._build();
             },
 
             '': function() {
-                this._popup && bemDom.destruct(this._popup.domElem);
+                bemDom.destruct(this.domElem);
             }
         }
     },
@@ -64,39 +64,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         }
 
         return this;
-    },
-
-    /**
-     * Show calendar
-     *
-     * @returns {calendar} this
-     */
-    show: function() {
-        this._build();
-
-        this._popup.setMod('visible', true);
-
-        return this;
-    },
-
-    /**
-     * Hide calendar
-     *
-     * @returns {calendar} this
-     */
-    hide: function() {
-        this._popup.delMod('visible');
-
-        return this;
-    },
-
-    /**
-     * Is shown calendar?
-     *
-     * @returns {boolean}
-     */
-    isShown: function() {
-        return this._popup.hasMod('visible');
     },
 
     /**
@@ -138,18 +105,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         }
 
         return null;
-    },
-
-    /**
-     * Set target
-     *
-     * @param {jQuery|Function} anchor - DOM elem or anchor Bem block.
-     * @returns {calendar} this
-     */
-    setAnchor: function(anchor) {
-        this._popup.setAnchor(anchor);
-
-        return this;
     },
 
     /**
@@ -270,8 +225,8 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                 }
             ]
         }));
-
-        this._popup.setContent(calendar);
+        bemDom.update(this.domElem, calendar);
+        this._selectedDayElem = this._findSelectedDay();
     },
 
     _calcWeeks: function(month) {
@@ -352,7 +307,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
         return rows;
     },
-
     _buildShortWeekdays: function() {
         var row = [];
 
@@ -409,19 +363,33 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             this.switchMonth(arrow.hasMod('direction', 'left') ? -1 : 1);
         }
     },
-
+    _findSelectedDay: function() {
+        var dayElems = this.findChildElems('day');
+        for(var i = 0; i < dayElems._entities.length;i++) {
+            if(dayElems._entities[i].hasMod('state', 'current')) {
+                return dayElems._entities[i];
+            }
+        }
+    },
     _onDayClick: function(e) {
         var date = $(e.currentTarget).data('day');
         if(!date) return;
 
+        if(this._selectedDayElem) {
+            this._selectedDayElem.delMod('state');
+        }
+        this._selectDayElem(e.bemTarget);
         this.setVal(date);
-        this.hide();
 
         var val = this.getVal();
         this._emit('change', {
             value: val,
             formated: this._formatDate(val)
         });
+    },
+    _selectDayElem: function(element) {
+        element.setMod('state', 'current');
+        this._selectedDayElem = element;
     }
 },  /** @lends calendar */ {
     lazyInit: false,

@@ -20,6 +20,17 @@ module.exports = function(bh) {
             { elem: 'calendar' },
             {
                 block: 'calendar',
+                mix: [
+                    {
+                        block: 'popup',
+                        mods:
+                        {
+                            'has-calendar': true,
+                            theme: 'islands',
+                            target: 'anchor'
+                        }
+                    }
+                ],
                 mods: {
                     theme: 'islands',
                     format: ctx.node.mods && ctx.node.mods['calendar-format']
