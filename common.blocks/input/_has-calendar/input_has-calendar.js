@@ -133,7 +133,18 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
         this._popup.delMod('visible');
 
         return this;
-    }
+    },
+    
+    /**
+     * Sets directions for calendar.
+     *
+     * @param {Array<String>} directions - @see Popup.directions
+     * @returns {input} this
+     */
+    setDirections: function(directions) {
+        this._popup.params.directions = directions;
+        return this;
+    },
 }, {
     onInit: function() {
         this._domEvents().on('pointerclick', this.prototype._onPointerclick);

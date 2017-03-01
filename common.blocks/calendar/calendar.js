@@ -108,18 +108,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     },
 
     /**
-     * Sets directions for calendar.
-     *
-     * @param {Array<String>} directions - @see Popup.directions
-     * @returns {calendar} this
-     */
-    setDirections: function(directions) {
-        this._popup.params.directions = directions;
-
-        return this;
-    },
-
-    /**
      * Sets limits
      *
      * @param {Date|String} [earlier] - left limit
