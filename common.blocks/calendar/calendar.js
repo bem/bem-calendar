@@ -30,12 +30,13 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                     this.params.earlierLimit,
                     this.params.laterLimit
                 );
-
-                if(this.params.defaultDate && this._isValidDate(this.params.defaultDate)) {
-                    this.setVal(this.params.defaultDate);
-                } else {
+                if(this.params.val && this._isValidDate(this.params.val)) {
+                    this.setVal(this.params.val);
+                }
+                if(!this._elem('container')) {
                     this._build();
                 }
+
             }
         }
     },
@@ -60,14 +61,17 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         this._val = this._isValidDate(date) ? date : null;
 
          if(this._val) {
+            var shouldRebuild = this._month.getMonth() !== date.getMonth() ||
+                                this._month.getFullYear() !== date.getFullYear();
 
-            if(this._month.getMonth() !== date.getMonth() || this._month.getFullYear() !== date.getFullYear()) {
-                this._month = new Date(this._val.getTime());
-                this._month.setDate(1);
+            this._month = new Date(this._val.getTime());
+            this._month.setDate(1);
+
+            if(!this._elem('container') || shouldRebuild) {
                 this._build();
             } else {
                 this._selectDayElem(
-                    this.findChildElems('day')
+                    this._elems('day')
                         .get(this._firstDayIndex + this._val.getDate() - 1)
                 );
             }
@@ -200,7 +204,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     },
     _build: function() {
         var rows = [];
-
         rows.push(this._buildShortWeekdays());
         rows = rows.concat(this._buildMonth(this._month));
 
@@ -224,6 +227,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         }));
         bemDom.update(this.domElem, calendar);
         this._selectedDayElem = this.findChildElem({ elem: 'day', modName: 'state', modVal: 'current' });
+        this._built = true;
     },
 
     _calcWeeks: function(month) {

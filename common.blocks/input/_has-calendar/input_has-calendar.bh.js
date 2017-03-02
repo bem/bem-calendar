@@ -9,7 +9,7 @@ module.exports = function(bh) {
             laterLimit: json.laterLimit,
             weekdays: json.weekdays,
             months: json.months,
-            defaultDate: json.defaultDate
+            val: json.val
         });
     });
 

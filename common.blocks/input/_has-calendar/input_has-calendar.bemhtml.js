@@ -7,7 +7,7 @@ block('input').mod('has-calendar', true)(
             laterLimit: ctx.laterLimit,
             weekdays: ctx.weekdays,
             months: ctx.months,
-            defaultDate: ctx.defaultDate
+            val: ctx.val
         } });
     }),
     elem('box').content()(function() {
