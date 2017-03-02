@@ -267,7 +267,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     },
     _buildMonth: function(month) {
         var rows = [],
-            indexSet = false;
+            isIndexSet = false;
         this._calcWeeks(month).forEach(function(week) {
             var row = [],
                 _this = this;
@@ -372,7 +372,8 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
     _onDayClick: function(e) {
         var date = $(e.currentTarget).data('day');
-        if(!date)            {return;}
+        if(!date) return;
+        
         this.setVal(date);
 
         var val = this.getVal();
