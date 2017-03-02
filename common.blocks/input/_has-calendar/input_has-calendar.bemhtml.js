@@ -16,6 +16,17 @@ block('input').mod('has-calendar', true)(
             {
                 block: 'calendar',
                 mods: { theme: 'islands', format: this.mods['calendar-format'] },
+                mix: [
+                    {
+                        block: 'popup',
+                        mods:
+                        {
+                            'has-calendar': true,
+                            theme: 'islands',
+                            target: 'anchor'
+                        }
+                    }
+                ],
                 js: this._calendar
             }
         ];
