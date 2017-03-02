@@ -93,7 +93,7 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
         }
     },
     /**
-     * Is shown calendar?
+     * Is calendar shown?
      *
      * @returns {boolean}
      */
@@ -134,7 +134,7 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
 
         return this;
     },
-    
+
     /**
      * Sets directions for calendar.
      *
@@ -144,7 +144,7 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
     setDirections: function(directions) {
         this._popup.params.directions = directions;
         return this;
-    },
+    }
 }, {
     onInit: function() {
         this._domEvents().on('pointerclick', this.prototype._onPointerclick);

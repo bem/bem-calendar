@@ -352,20 +352,12 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         }
     },
     _findSelectedDay: function() {
-        var dayElems = this.findChildElems('day');
-        for(var i = 0; i < dayElems._entities.length;i++) {
-            if(dayElems._entities[i].hasMod('state', 'current')) {
-                return dayElems._entities[i];
-            }
-        }
+        return this.findChildElem({ elem: 'day', modName: 'state', modVal: 'current' });
     },
     _onDayClick: function(e) {
         var date = $(e.currentTarget).data('day');
         if(!date) return;
 
-        if(this._selectedDayElem) {
-            this._selectedDayElem.delMod('state');
-        }
         this._selectDayElem(e.bemTarget);
         this.setVal(date);
 
@@ -376,6 +368,9 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         });
     },
     _selectDayElem: function(element) {
+        if(this._selectedDayElem) {
+            this._selectedDayElem.delMod('state');
+        }
         element.setMod('state', 'current');
         this._selectedDayElem = element;
     }
