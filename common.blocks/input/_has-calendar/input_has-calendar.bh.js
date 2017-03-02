@@ -8,7 +8,8 @@ module.exports = function(bh) {
             earlierLimit: json.earlierLimit,
             laterLimit: json.laterLimit,
             weekdays: json.weekdays,
-            months: json.months
+            months: json.months,
+            val: json.val
         });
     });
 
@@ -20,6 +21,17 @@ module.exports = function(bh) {
             { elem: 'calendar' },
             {
                 block: 'calendar',
+                mix: [
+                    {
+                        block: 'popup',
+                        mods:
+                        {
+                            'has-calendar': true,
+                            theme: 'islands',
+                            target: 'anchor'
+                        }
+                    }
+                ],
                 mods: {
                     theme: 'islands',
                     format: ctx.node.mods && ctx.node.mods['calendar-format']

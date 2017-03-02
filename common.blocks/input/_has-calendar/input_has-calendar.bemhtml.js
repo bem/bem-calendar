@@ -6,7 +6,8 @@ block('input').mod('has-calendar', true)(
             earlierLimit: ctx.earlierLimit,
             laterLimit: ctx.laterLimit,
             weekdays: ctx.weekdays,
-            months: ctx.months
+            months: ctx.months,
+            val: ctx.val
         } });
     }),
     elem('box').content()(function() {
@@ -16,6 +17,17 @@ block('input').mod('has-calendar', true)(
             {
                 block: 'calendar',
                 mods: { theme: 'islands', format: this.mods['calendar-format'] },
+                mix: [
+                    {
+                        block: 'popup',
+                        mods:
+                        {
+                            'has-calendar': true,
+                            theme: 'islands',
+                            target: 'anchor'
+                        }
+                    }
+                ],
                 js: this._calendar
             }
         ];

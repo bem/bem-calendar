@@ -1,8 +1,5 @@
-block('calendar').mix()({
-    block: 'popup',
-    mods: {
-        'has-calendar': true,
-        target: 'anchor',
-        theme: 'islands'
-    }
-});
+block('calendar')(
+    js()(function() {
+        return { val: this.ctx.val };
+    })
+);

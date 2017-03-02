@@ -1,20 +1,21 @@
-({
-    mustDeps: {
-        block: 'i-bem-dom'
-    },
-    shouldDeps: [
-        {
-            elems: ['arrow', 'day', 'dayname']
-        },
-        {
-            mods: { theme: 'islands' }
-        },
-        {
-            block: 'popup',
-            mods: {
-                theme: 'islands',
-                target: 'anchor'
+[{
+        mustDeps:
+            { block: 'i-bem-dom' },
+        shouldDeps: [
+            { block: 'jquery', elem: 'event', mods: { type: 'pointer' } },
+
+            {
+                elems: ['arrow', 'day', 'dayname']
+            },
+            {
+                mods: { theme: 'islands' }
             }
+        ]
+    },
+    {
+        tech: 'js',
+        shouldDeps: {
+            tech: 'bemhtml'
         }
-    ]
-});
+    }
+];
