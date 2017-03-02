@@ -227,7 +227,6 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         }));
         bemDom.update(this.domElem, calendar);
         this._selectedDayElem = this.findChildElem({ elem: 'day', modName: 'state', modVal: 'current' });
-        this._built = true;
     },
 
     _calcWeeks: function(month) {
@@ -288,9 +287,9 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
                 if(day && !off) {
                     dayElem.attrs['data-day'] = _this._formatDate(day);
-                    if(!indexSet) {
+                    if(!isIndexSet) {
                         _this._firstDayIndex = i;
-                        indexSet = true;
+                        isIndexSet = true;
                     }
                 }
 
@@ -373,7 +372,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     _onDayClick: function(e) {
         var date = $(e.currentTarget).data('day');
         if(!date) return;
-        
+
         this.setVal(date);
 
         var val = this.getVal();
