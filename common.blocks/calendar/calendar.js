@@ -22,7 +22,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             inited: function() {
                 this._val = null;
                 this._selectedDayElem = null;
-
+                this._firstDayIndex = 0;
                 this._month = this._getToday();
                 this._month.setDate(1);
 
@@ -30,11 +30,12 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                     this.params.earlierLimit,
                     this.params.laterLimit
                 );
-                this._build();
-            },
 
-            '': function() {
-                bemDom.destruct(this.domElem);
+                if(this.params.defaultDate && this._isValidDate(this.params.defaultDate)) {
+                    this.setVal(this.params.defaultDate);
+                } else {
+                    this._build();
+                }
             }
         }
     },
@@ -58,11 +59,19 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         var date = this.parseDate(val);
         this._val = this._isValidDate(date) ? date : null;
 
-        if(this._val) {
-            this._month = new Date(this._val.getTime());
-            this._month.setDate(1);
-        }
+         if(this._val) {
 
+            if(this._month.getMonth() !== date.getMonth() || this._month.getFullYear() !== date.getFullYear()) {
+                this._month = new Date(this._val.getTime());
+                this._month.setDate(1);
+                this._build();
+            } else {
+                this._selectDayElem(
+                    this.findChildElems('day')
+                        .get(this._firstDayIndex + this._val.getDate() - 1)
+                );
+            }
+        }
         return this;
     },
 
@@ -214,7 +223,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
             ]
         }));
         bemDom.update(this.domElem, calendar);
-        this._selectedDayElem = this._findSelectedDay();
+        this._selectedDayElem = this.findChildElem({ elem: 'day', modName: 'state', modVal: 'current' });
     },
 
     _calcWeeks: function(month) {
@@ -253,8 +262,8 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         return { week: week, weekDay: weekDay };
     },
     _buildMonth: function(month) {
-        var rows = [];
-
+        var rows = [],
+            indexSet = false;
         this._calcWeeks(month).forEach(function(week) {
             var row = [],
                 _this = this;
@@ -275,6 +284,10 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
                 if(day && !off) {
                     dayElem.attrs['data-day'] = _this._formatDate(day);
+                    if(!indexSet) {
+                        _this._firstDayIndex = i;
+                        indexSet = true;
+                    }
                 }
 
                 if(weekend) {
@@ -350,15 +363,12 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         if(!arrow.hasMod('disabled')) {
             this.switchMonth(arrow.hasMod('direction', 'left') ? -1 : 1);
         }
+
     },
-    _findSelectedDay: function() {
-        return this.findChildElem({ elem: 'day', modName: 'state', modVal: 'current' });
-    },
+
     _onDayClick: function(e) {
         var date = $(e.currentTarget).data('day');
-        if(!date) return;
-
-        this._selectDayElem(e.bemTarget);
+        if(!date)            {return;}
         this.setVal(date);
 
         var val = this.getVal();

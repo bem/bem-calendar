@@ -8,7 +8,8 @@ module.exports = function(bh) {
             earlierLimit: json.earlierLimit,
             laterLimit: json.laterLimit,
             weekdays: json.weekdays,
-            months: json.months
+            months: json.months,
+            defaultDate: json.defaultDate
         });
     });
 
