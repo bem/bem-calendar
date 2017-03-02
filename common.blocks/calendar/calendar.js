@@ -23,15 +23,19 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                 this._val = null;
                 this._selectedDayElem = null;
                 this._firstDayIndex = 0;
-                this._month = this._getToday();
+                var today = this._getToday();
+
+                this._month = today;
                 this._month.setDate(1);
 
                 this.setLimits(
                     this.params.earlierLimit,
                     this.params.laterLimit
                 );
-                if(this.params.val && this._isValidDate(this.params.val)) {
+                if(this._isValidDate(this.params.val)) {
                     this.setVal(this.params.val);
+                }  else{
+                    this.setVal(today);
                 }
                 if(!this._elem('container')) {
                     this._build();
