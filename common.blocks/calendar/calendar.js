@@ -34,7 +34,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                 );
                 if(this._isValidDate(this.params.val)) {
                     this.setVal(this.params.val);
-                }  else{
+                }  else {
                     this.setVal(today);
                 }
                 if(!this._elem('container')) {
