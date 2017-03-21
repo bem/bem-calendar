@@ -4,8 +4,7 @@ module.exports = function(bh) {
             block: 'popup',
             mods: {
                 'has-calendar': true,
-                target: 'anchor',
-                theme: 'islands'
+                target: 'anchor'
             }
         });
     });

@@ -2,7 +2,6 @@ block('calendar').mix()({
     block: 'popup',
     mods: {
         'has-calendar': true,
-        target: 'anchor',
-        theme: 'islands'
+        target: 'anchor'
     }
 });
