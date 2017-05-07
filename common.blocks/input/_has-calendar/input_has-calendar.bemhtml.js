@@ -21,7 +21,3 @@ block('input').mod('has-calendar', true)(
         ];
     })
 );
-
-block('input').mod('readonly', true).elem('control').attrs()(function() {
-    return this.extend(applyNext() || {}, { readonly: 'readonly' });
-});
