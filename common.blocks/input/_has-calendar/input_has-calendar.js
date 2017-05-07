@@ -10,36 +10,33 @@ modules.define('input', ['i-bem-dom', 'jquery', 'dom', 'calendar', 'popup'], fun
  * @bem
  */
 provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends input.prototype */{
+    beforeSetMod: {
+        focused: {
+            '': function() {
+                this.__base.apply(this, arguments);
+
+                if(this._ignoreBlur) {
+                    this._ignoreBlur = false;
+                    return false;
+                }
+            }
+        }
+    },
     onSetMod: {
         js: {
             inited: function() {
                 this.__base.apply(this, arguments);
 
                 this._popup = this.findChildBlock(Popup);
-                this.setAnchor(this.domElem);
+                this._setAnchor(this.domElem);
 
                 this._calendar = this.findChildBlock(Calendar)
                     .setVal(this.getVal());
 
-                this._shouldShowCalendar = false;
                 this._events(this._calendar).on('change', function(e, data) {
-                    this._needShowCalendar = false;
-
                     this
                         .setVal(data.formated)
-                        .setMod('focused');
-                    this.hide();
-                });
-
-                this._domEvents(bemDom.doc).on('pointerdown', function(e) {
-                    var target = $(e.target),
-                        insideCalendar = dom.contains(this._calendar.domElem, target);
-
-                    if(!insideCalendar && e.target !== this._elem('calendar').domElem[0]) {
-                        this._needShowCalendar = true;
-                    }
-
-                    this._ignoreBlur = insideCalendar;
+                        .hideCalendar();
                 });
             },
             '': function() {
@@ -51,53 +48,58 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
             'true': function() {
                 this.__base.apply(this, arguments);
 
-                if(!this._needShowCalendar) {
-                    this._needShowCalendar = true;
-                    return;
+                this._domEvents().on('pointerclick', this._onPointerclick);
+                this._domEvents(bemDom.doc).on('pointerdown', this._onOutsideClick);
+
+                if(this._wasIconCliked) {
+                    this._wasIconCliked = false;
+
+                    this._wasShown ?
+                        this.hideCalendar() :
+                        this.showCalendar();
+
+                } else {
+                    this.isCalendarShown() || this.showCalendar();
                 }
-
-                if(this.isShown()) return;
-
-                this.show();
             },
             '': function() {
                 this.__base.apply(this, arguments);
 
-                if(this._ignoreBlur) {
-                    this._ignoreBlur = false;
-                } else {
-                    this.hide();
-                }
+                this._domEvents().un('pointerclick', this._onPointerclick);
+                this._domEvents(bemDom.doc).un('pointerdown', this._onOutsideClick);
+
+                this.hideCalendar();
             }
         }
     },
-    _onPointerclick: function(e) {
+    _onOutsideClick: function(e) {
+        var target = $(e.target),
+            isInsideCalendar = dom.contains(this._popup.domElem, target);
+
+        this._wasShown = e.target === this._elem('calendar').domElem[0] && this.isCalendarShown();
+
+        this._ignoreBlur = isInsideCalendar;
+
+        isInsideCalendar || this.delMod('focused');
+
+    },
+    _onPointerclick: function() {
         this.__base.apply(this, arguments);
 
-        if(this.hasMod('disabled') || this.isShown()) return;
+        if(this.hasMod('disabled')) return;
 
-        if(e.target === this._elem('calendar').domElem[0]) {
-            this._needShowCalendar = true;
-            return;
-        }
-
-        this.show();
+        this.showCalendar();
     },
-    _onCalendarClick: function() {
-        if(this.isShown()) {
-            this.hide();
-        } else {
-            this._calendar
-                .setVal(this.getVal());
-            this.show();
-        }
+    _onCalendarIconClick: function() {
+        this._wasIconCliked = true;
+        this.setMod('focused');
     },
     /**
      * Is calendar shown?
      *
      * @returns {boolean}
      */
-    isShown: function() {
+    isCalendarShown: function() {
         return this._popup.hasMod('visible');
     },
 
@@ -107,7 +109,7 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
      * @param {jQuery|Function} anchor - DOM elem or anchor Bem block.
      * @returns {input} this
      */
-    setAnchor: function(anchor) {
+    _setAnchor: function(anchor) {
         this._popup.setAnchor(anchor);
         return this;
     },
@@ -117,9 +119,9 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
      *
      * @returns {input} this
      */
-    show: function() {
+    showCalendar: function() {
         this._calendar._build();
-        this._popup.setMod('visible', true);
+        this._popup.setMod('visible');
 
         return this;
     },
@@ -129,7 +131,7 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
      *
      * @returns {input} this
      */
-    hide: function() {
+    hideCalendar: function() {
         this._popup.delMod('visible');
 
         return this;
@@ -141,14 +143,13 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
      * @param {Array<String>} directions - @see Popup.directions
      * @returns {input} this
      */
-    setDirections: function(directions) {
+    setCalendarDirections: function(directions) {
         this._popup.params.directions = directions;
         return this;
     }
 }, {
     onInit: function() {
-        this._domEvents().on('pointerclick', this.prototype._onPointerclick);
-        this._domEvents('calendar').on('pointerclick', this.prototype._onCalendarClick);
+        this._domEvents('calendar').on('pointerclick', this.prototype._onCalendarIconClick);
 
         this.__base.apply(this, arguments);
     }

@@ -20,8 +20,7 @@ block('input').mod('has-calendar', true)(
                 mix: [
                     {
                         block: 'popup',
-                        mods:
-                        {
+                        mods: {
                             'has-calendar': true,
                             theme: 'islands',
                             target: 'anchor'
