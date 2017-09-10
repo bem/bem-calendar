@@ -22,7 +22,7 @@ block('input').mod('has-calendar', true)(
                         block: 'popup',
                         mods: {
                             'has-calendar': true,
-                            theme: 'islands',
+                            theme: this.mods.theme,
                             target: 'anchor'
                         }
                     }
