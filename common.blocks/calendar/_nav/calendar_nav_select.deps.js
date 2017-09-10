@@ -10,7 +10,7 @@
     {
         tech: 'js',
         shouldDeps: [
-            { block: 'select', mods: { mode: 'radio' }, tech: 'bemhtml' },
+            { block: 'select', mods: { mode: 'radio' }, tech: 'bemhtml' }
         ]
     }
 ];

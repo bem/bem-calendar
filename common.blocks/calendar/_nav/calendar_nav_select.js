@@ -2,11 +2,11 @@
  * @module calendar
  */
 modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'select'], function(provide, bemDom, BEMHTML, $, Select, Calendar) {
-  
+
   function compareMonths(a, b) {
       return (a.getFullYear() - b.getFullYear()) * 100 + a.getMonth() - b.getMonth();
   }
-    
+
   /**
    * @exports
    * @class Calendar
@@ -22,12 +22,12 @@ modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'select'], functio
        */
       switchMonth: function(month) {
           this._month.setMonth(month);
-        
+
           this._nextTick(this._build);
-  
+
           return this;
       },
-  
+
       /**
        * Switch year
        *
@@ -42,21 +42,22 @@ modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'select'], functio
                   prevMonth = compareMonths(this._month, this._earlierLimit) > 0,
                   nextMonth = compareMonths(this._laterLimit, this._month) > 0;
 
-              if (!prevMonth)
-                this._month.setMonth(month + 1);
-              else if (!nextMonth)
-                this._month.setMonth(month - 1);
+              if(!prevMonth) {
+                  this._month.setMonth(month + 1);
+              } else if(!nextMonth) {
+                  this._month.setMonth(month - 1);
+              }
           }
-  
+
           this._nextTick(this._build);
-  
+
           return this;
       },
 
       _buildTitle: function(month) {
-          var curYear   = month.getFullYear();
-              firstYear = this._earlierLimit ? this._earlierLimit.getFullYear() : curYear - 10;
-              lastYear  = this._laterLimit ? this._laterLimit.getFullYear() : curYear + 10;
+          var curYear   = month.getFullYear(),
+              firstYear = this._earlierLimit ? this._earlierLimit.getFullYear() : curYear - 10,
+              lastYear  = this._laterLimit ? this._laterLimit.getFullYear() : curYear + 10,
               months    = [],
               years     = [];
 
@@ -65,7 +66,7 @@ modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'select'], functio
               months.push({ val: i, text: el, disabled: !this._isValidDate(date) });
           }, this);
 
-          for (var i = firstYear; i <= lastYear; i++) {
+          for(var i = firstYear; i <= lastYear; i++) {
               years.push({ val: i, text: i });
           }
 
@@ -77,7 +78,7 @@ modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'select'], functio
                       mods: {
                           mode: 'radio',
                           theme: this.getMod('theme'),
-                          size: this.getMod('select-size'),
+                          size: this.getMod('select-size')
                       },
                       mix: { block: 'calendar', elem: 'month' },
                       name: 'month',
@@ -90,7 +91,7 @@ modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'select'], functio
                           mode: 'radio',
                           theme: this.getMod('theme'),
                           size: this.getMod('select-size'),
-                          disabled: years.length > 1 ? false : true
+                          disabled: !(years.length > 1)
                       },
                       mix: { block: 'calendar', elem: 'year' },
                       name: 'year',
@@ -100,7 +101,7 @@ modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'select'], functio
               ]
           };
       },
-  
+
       _onSelectChange: function(e) {
           var select = e.bemTarget,
               val    = select.getVal();
@@ -116,11 +117,11 @@ modules.define('calendar', ['i-bem-dom', 'BEMHTML', 'jquery', 'select'], functio
       }
   },  /** @lends calendar */ {
       lazyInit: false,
-  
+
       onInit: function() {
           this.__base.apply(this, arguments);
           this._events(Select).on('change', this.prototype._onSelectChange);
       }
   }));
-  
+
   });
