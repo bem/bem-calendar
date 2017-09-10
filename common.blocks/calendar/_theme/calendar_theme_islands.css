@@ -12,4 +12,9 @@
     {
         background: #ffeca6;
     }
+
+    .calendar_theme_islands .calendar__month + .calendar__year
+    {
+        margin-left: 10px;
+    }
 }
