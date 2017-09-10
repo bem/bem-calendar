@@ -23,7 +23,7 @@ module.exports = function(bh) {
                         mods:
                         {
                             'has-calendar': true,
-                            theme: 'islands',
+                            theme: ctx.node.mods.theme,
                             target: 'anchor'
                         }
                     }
