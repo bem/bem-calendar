@@ -1,5 +1,5 @@
 block('calendar')(
     js()(function() {
-        return { val: this.ctx.val };
+        return this.ctx.js || true;
     })
 );
