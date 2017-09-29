@@ -1,5 +1,7 @@
 block('calendar')(
     js()(function() {
-        return this.ctx.js || true;
+        var js = this.ctx.js;
+        js.val = this.ctx.val;
+        return js || true;
     })
 );
