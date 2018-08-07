@@ -1,5 +1,8 @@
 block('calendar')(
     js()(function() {
-        return { val: this.ctx.val };
+        var prevJs = applyNext(),
+            js = { val: this.ctx.val };
+
+        return prevJs ? this.extend(prevJs, js) : js;
     })
 );
