@@ -75,6 +75,11 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                         .get(this._firstDayIndex + this._val.getDate() - 1)
                 );
             }
+
+            this._emit('change', {
+                value: this._val,
+                formated: this._formatDate(this._val)
+            });
         }
         return this;
     },
@@ -372,13 +377,8 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         if(!date) return;
 
         this.setVal(date);
-
-        var val = this.getVal();
-        this._emit('change', {
-            value: val,
-            formated: this._formatDate(val)
-        });
     },
+
     _selectDayElem: function(element) {
         if(this._selectedDayElem) {
             this._selectedDayElem.delMod('state');
