@@ -30,7 +30,9 @@ module.exports = function(bh) {
                 ],
                 mods: {
                     theme: ctx.node.mods.theme,
-                    format: ctx.node.mods && ctx.node.mods['calendar-format']
+                    format: ctx.node.mods && ctx.node.mods['calendar-format'],
+                    nav: ctx.node.mods['calendar-nav'],
+                    'select-size': ctx.node.mods['calendar-nav'] && ctx.node.mods.size
                 },
                 js: ctx.tParam('calendar')
             }

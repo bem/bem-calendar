@@ -74,7 +74,7 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
     },
     _onOutsideClick: function(e) {
         var target = $(e.target),
-            isInsideCalendar = dom.contains(this._popup.domElem, target);
+            isInsideCalendar = dom.contains(this._popup.domElem, target) || dom.containsFocus(this._popup.domElem);
 
         this._wasShown = e.target === this._elem('calendar').domElem[0] && this.isCalendarShown();
 

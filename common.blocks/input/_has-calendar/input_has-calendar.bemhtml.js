@@ -16,7 +16,7 @@ block('input').mod('has-calendar', true)(
             { elem: 'calendar' },
             {
                 block: 'calendar',
-                mods: { theme: this.mods.theme, format: this.mods['calendar-format'] },
+                mods: { theme: this.mods.theme, format: this.mods['calendar-format'], nav: this.mods['calendar-nav'], 'select-size': this.mods['calendar-nav'] && this.mods.size },
                 mix: [
                     {
                         block: 'popup',
