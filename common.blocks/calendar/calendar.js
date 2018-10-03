@@ -270,7 +270,9 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
         return { week: week, weekDay: weekDay };
     },
     _buildMonth: function(month) {
-        var rows = [];
+        var rows = [],
+            today = this._getToday(),
+            todayFound = false;
         this._calcWeeks(month).forEach(function(week) {
             var row = [],
                 _this = this;
@@ -302,8 +304,14 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
                     dayElem.elemMods.type = 'off';
                 }
 
-                if(day && val && day.getTime() === val.getTime()) {
-                    dayElem.elemMods.state = 'current';
+                if(day) {
+                    var time = day.getTime();
+                    if(val && time === val.getTime()) {
+                        dayElem.elemMods.state = 'current';
+                    } else if(!todayFound && time === today.getTime()) {
+                        dayElem.elemMods.state = 'today';
+                        todayFound = true;
+                    }
                 }
 
                 row.push(dayElem);

@@ -19,12 +19,11 @@
     color: #d00;
 }
 
-.calendar__day_state_current
+.calendar__day_state_current,
+.calendar__day_state_today
 {
     position: relative;
     z-index: 2;
-
-    display: inline-block;
 
     margin: 0 -1px 0 0;
 
@@ -38,7 +37,8 @@
 }
 
 .calendar__day_state_current:after,
-.calendar__day_state_current:before
+.calendar__day_state_current:before,
+.calendar__day_state_today:before
 {
     position: absolute;
     top: 0;
@@ -59,14 +59,16 @@
     left: 0;
 }
 
-.calendar__day_state_current .calendar__inner
+.calendar__day_state_current .calendar__inner,
+.calendar__day_state_today .calendar__inner
 {
     position: relative;
     z-index: 1;
 }
 
 .ua_js_no .calendar__day_state_current:after,
-.ua_js_no .calendar__day_state_current:before
+.ua_js_no .calendar__day_state_current:before,
+.ua_js_no .calendar__day_state_today:before
 {
     display: none;
 }
