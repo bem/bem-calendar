@@ -12,4 +12,8 @@
     {
         background: #ffeca6;
     }
+
+    .calendar_theme_islands .calendar__day_today {
+        font-weight: bold;
+    }
 }
