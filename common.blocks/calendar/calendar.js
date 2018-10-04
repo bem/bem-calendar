@@ -271,8 +271,7 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
     },
     _buildMonth: function(month) {
         var rows = [],
-            today = this._getToday(),
-            todayFound = false;
+            today = this._getToday();
         this._calcWeeks(month).forEach(function(week) {
             var row = [],
                 _this = this;
@@ -306,12 +305,12 @@ provide(bemDom.declBlock(this.name, /** @lends calendar.prototype */{
 
                 if(day) {
                     var time = day.getTime();
+
                     if(val && time === val.getTime()) {
                         dayElem.elemMods.state = 'current';
-                    } else if(!todayFound && time === today.getTime()) {
-                        dayElem.elemMods.state = 'today';
-                        todayFound = true;
                     }
+
+                    dayElem.elemMods.today = time === today.getTime();
                 }
 
                 row.push(dayElem);
