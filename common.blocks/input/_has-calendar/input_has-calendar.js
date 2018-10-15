@@ -149,7 +149,7 @@ provide(Input.declMod({ modName: 'has-calendar', modVal: true }, /** @lends inpu
     }
 }, {
     onInit: function() {
-        this._domEvents('calendar').on('pointerclick', this.prototype._onCalendarIconClick);
+        this._domEvents('calendar').on('click', this.prototype._onCalendarIconClick);
 
         this.__base.apply(this, arguments);
     }
